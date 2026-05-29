@@ -147,7 +147,6 @@
         .btn-danger { background-color: var(--danger); color: white; }
         .btn-secondary { background-color: #f3f4f6; color: var(--text-light); border: 1px solid #e5e7eb; }
 
-        /* Input oculto de tipo archivo/cámara nativa */
         #camera-input { display: none; }
 
         .days-container {
@@ -176,12 +175,60 @@
             border-color: #059669;
         }
 
+        /* Foto de historial */
+        .photo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
         .photo-preview {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 2px solid var(--primary-light);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-color: #e5e7eb;
+        }
+
+        /* Visor de foto en grande (Modal) */
+        .img-modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .img-modal img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+            border: 3px solid white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .img-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         nav.nav-bottom {
@@ -265,6 +312,11 @@
         <span class="brand-title">✨ Kibou Fashion</span>
         <button class="btn-admin-trigger" id="lock-btn" onclick="abrirLoginAdmin()">🔒 Admin</button>
     </header>
+
+    <div id="photo-modal" class="img-modal" onclick="cerrarFotoGrande()">
+        <button class="img-modal-close" onclick="cerrarFotoGrande()">✕</button>
+        <img id="photo-modal-img" src="" alt="Foto Ampliada">
+    </div>
 
     <div class="container">
 
@@ -441,7 +493,7 @@
             return `${añoInicio}-W${String(semana).padStart(2, '0')}`;
         }
 
-        // --- SISTEMA NATIVO DE CÁMARA (NUEVO) ---
+        // --- SISTEMA NATIVO DE CÁMARA ---
         const cameraInput = document.getElementById('camera-input');
 
         function intentarFichaje(tipo) {
@@ -457,14 +509,10 @@
             if (tipo === 'entrada' && registroAbierto) return alert("Ya tienes un turno abierto de Entrada.");
             if (tipo === 'salida' && !registroAbierto) return alert("No tienes un turno abierto de Entrada registrado.");
 
-            // Guardar contexto temporal para cuando responda la cámara
             ficherolSujeto = { tipo, empId, empleado, registroAbierto };
-
-            // Disparar la ventana de la cámara del celular
             cameraInput.click();
         }
 
-        // Evento que se ejecuta en cuanto se toma y acepta la foto en el cel
         cameraInput.addEventListener('change', function(e) {
             if (!e.target.files || e.target.files.length === 0) return;
             
@@ -507,10 +555,20 @@
             }
 
             guardarBD();
-            // Resetear
             document.getElementById('check-pin').value = '';
-            cameraInput.value = ''; // Limpiar input file
+            cameraInput.value = ''; 
             cargarEmpleadosEnSelects();
+        }
+
+        // --- VISUALIZADOR DE FOTO EN GRANDE (NUEVO) ---
+        function mostrarFotoGrande(src) {
+            if (!src || src === '') return;
+            document.getElementById('photo-modal-img').src = src;
+            document.getElementById('photo-modal').style.display = 'flex';
+        }
+
+        function cerrarFotoGrande() {
+            document.getElementById('photo-modal').style.display = 'none';
         }
 
         // --- NAVEGACIÓN ---
@@ -575,7 +633,7 @@
                 contenedor.innerHTML += `
                     <div class="record-item">
                         <div style="display: flex; gap: 0.75rem; align-items: center;">
-                            <img src="${r.fotoEntrada}" class="photo-preview">
+                            <img src="${r.fotoEntrada}" class="photo-preview" onclick="mostrarFotoGrande('${r.fotoEntrada}')">
                             <div>
                                 <strong>${r.empleadoNombre}</strong><br>
                                 <small style="color: var(--text-light)">Inició: ${r.fecha} a las ${r.horaEntrada}</small>
@@ -762,7 +820,7 @@
             renderNomina();
         }
 
-        // --- HISTORIAL ---
+        // --- HISTORIAL CON VISUALIZACIÓN DE FOTOS ---
         function cargarFiltrosHistorial() {
             const select = document.getElementById('filtro-historial-emp');
             select.innerHTML = '<option value="">Todos los empleados</option>';
@@ -784,22 +842,36 @@
 
             filtrados.forEach(r => {
                 const calculo = calcularHorasYPago(r);
+                
+                // Marcadores de imagen vacía si no existe la de salida aún
+                const imgEntradaSrc = r.fotoEntrada || '';
+                const imgSalidaSrc = r.fotoSalida || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewBox="0 0 24 24" fill="%23cbd5e1"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>';
+
                 contenedor.innerHTML += `
                     <div class="card" style="font-size: 0.9rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <strong style="color:var(--primary-dark)">${r.empleadoNombre}</strong>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <strong style="color:var(--primary-dark); font-size:1rem;">${r.empleadoNombre}</strong>
                             <small class="badge" style="background: var(--primary-light); color: var(--primary-dark)">${r.fecha}</small>
                         </div>
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <img src="${r.fotoEntrada || ''}" class="photo-preview">
-                            <img src="${r.fotoSalida || ''}" class="photo-preview">
-                            <div style="flex-grow:1; text-align: right;">
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            
+                            <div class="photo-wrapper">
+                                <span>Entrada</span>
+                                <img src="${imgEntradaSrc}" class="photo-preview" onclick="mostrarFotoGrande('${imgEntradaSrc}')" alt="Entrada">
+                            </div>
+
+                            <div class="photo-wrapper">
+                                <span>Salida</span>
+                                <img src="${imgSalidaSrc}" class="photo-preview" onclick="mostrarFotoGrande('${r.fotoSalida}')" alt="Salida">
+                            </div>
+
+                            <div style="flex-grow:1; text-align: right; font-size: 0.85rem;">
                                 <p>🛫 <b>Entrada:</b> ${r.horaEntrada}</p>
                                 <p>🛬 <b>Salida:</b> ${r.horaSalida || '<span style="color:orange; font-weight:bold;">Abierto</span>'}</p>
-                                <p>🧮 <b>Total:</b> ${calculo.horas.toFixed(2)} hrs ($${calculo.pago.toFixed(2)})</p>
+                                <p style="margin-top:2px; font-weight:700;">🧮 ${calculo.horas.toFixed(2)} hrs ($${calculo.pago.toFixed(2)})</p>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 0.25rem; margin-top: 0.5rem;">
+                        <div style="display: flex; gap: 0.25rem; margin-top: 0.75rem;">
                             <button class="btn-primary" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="editarRegistroManual('${r.id}')">Ajustar Tiempos</button>
                             <button class="btn-danger" style="padding: 0.3rem 0.5rem; font-size: 0.75rem; width: auto;" onclick="eliminarRegistro('${r.id}')">❌</button>
                         </div>
