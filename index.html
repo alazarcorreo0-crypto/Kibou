@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kibou Fashion - Control de Asistencia</title>
     
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#db2777">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- Web App Manifest (Inline via Data URI) -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIktpYm91IEZhc2hpb24gQXNpc3RlbmNpYSIsCiAgInNob3J0X25hbWUiOiAiS2lib3UgRmFzaGlvbiIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAidXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZGYyZjgiLAogICJ0aGVtZV9jb2xvciI6ICIjZGIyNzc3IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO3V0ZjgsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpWVdCb3g9JzAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTIn ryeD0nMTAwJyBmaWxsPScjZGIyNzc3Jy8+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 
     <style>
@@ -149,6 +147,9 @@
         .btn-danger { background-color: var(--danger); color: white; }
         .btn-secondary { background-color: #f3f4f6; color: var(--text-light); border: 1px solid #e5e7eb; }
 
+        /* Input oculto de tipo archivo/cámara nativa */
+        #camera-input { display: none; }
+
         .days-container {
             display: flex;
             justify-content: space-between;
@@ -175,21 +176,6 @@
             border-color: #059669;
         }
 
-        #camera-container {
-            width: 100%;
-            max-width: 320px;
-            margin: 1.25rem auto;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #000;
-            aspect-ratio: 4/3;
-            position: relative;
-            border: 3px solid var(--primary-light);
-        }
-
-        #video { width: 100%; height: 100%; object-fit: cover; }
-        #canvas { display: none; }
-
         .photo-preview {
             width: 60px;
             height: 60px;
@@ -198,7 +184,6 @@
             border: 2px solid var(--primary-light);
         }
 
-        /* Menú Inferior (Oculto por defecto en CSS) */
         nav.nav-bottom {
             position: fixed;
             bottom: 0;
@@ -206,7 +191,7 @@
             right: 0;
             background: var(--surface);
             border-top: 2px solid var(--primary-light);
-            display: none; /* CORRECCIÓN: Se oculta por completo */
+            display: none; 
             justify-content: space-around;
             padding: 0.6rem 0;
             z-index: 100;
@@ -283,7 +268,8 @@
 
     <div class="container">
 
-        <!-- PANEL DE ACCESO ADMIN (VISTA INDEPENDIENTE) -->
+        <input type="file" accept="image/*" capture="user" id="camera-input">
+
         <section id="view-login-admin" class="view-section">
             <div class="card">
                 <h2>🔒 Iniciar Sesión de Administrador</h2>
@@ -302,7 +288,6 @@
             </div>
         </section>
 
-        <!-- VISTA: CHECADOR -->
         <section id="view-checador" class="view-section active">
             <div class="card">
                 <h2>⏱️ Registrar Entrada / Salida</h2>
@@ -314,20 +299,14 @@
                     <label for="check-pin">Ingresa tu PIN (4 dígitos)</label>
                     <input type="password" id="check-pin" pattern="\d*" maxlength="4" placeholder="••••" inputmode="numeric">
                 </div>
-                
-                <div id="camera-container">
-                    <video id="video" autoplay playsinline></video>
-                    <canvas id="canvas"></canvas>
-                </div>
 
-                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button class="btn-success" onclick="procesarFichaje('entrada')">Entrada</button>
-                    <button class="btn-danger" onclick="procesarFichaje('salida')">Salida</button>
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button class="btn-success" style="padding: 1rem;" onclick="intentarFichaje('entrada')">📸 Entrada</button>
+                    <button class="btn-danger" style="padding: 1rem;" onclick="intentarFichaje('salida')">📸 Salida</button>
                 </div>
             </div>
         </section>
 
-        <!-- VISTA: TURNOS ABIERTOS -->
         <section id="view-turnos" class="view-section">
             <div class="card">
                 <h2>🟢 Turnos Activos en Campo</h2>
@@ -335,7 +314,6 @@
             </div>
         </section>
 
-        <!-- VISTA: NÓMINA -->
         <section id="view-nomina" class="view-section">
             <div class="card">
                 <h2>📊 Nómina Diario / Semanal</h2>
@@ -347,7 +325,6 @@
             </div>
         </section>
 
-        <!-- VISTA: EMPLEADOS -->
         <section id="view-empleados" class="view-section">
             <div class="card">
                 <h2 id="form-emp-title">👤 Crear / Editar Empleado</h2>
@@ -376,7 +353,6 @@
             </div>
         </section>
 
-        <!-- VISTA: HISTORIAL -->
         <section id="view-historial" class="view-section">
             <div class="card">
                 <h2>📜 Historial General de Checadas</h2>
@@ -389,7 +365,6 @@
 
     </div>
 
-    <!-- Menú Inferior (Controlado dinámicamente) -->
     <nav class="nav-bottom" id="admin-nav">
         <button class="nav-item active" onclick="cambiarVista('checador')">
             <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
@@ -411,7 +386,6 @@
             <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
             Historial
         </button>
-        <!-- BOTÓN ADICIONAL PARA CERRAR SESIÓN -->
         <button class="nav-item" onclick="cerrarSesiónAdmin()" style="color:var(--danger)">
             <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
             Salir
@@ -419,10 +393,9 @@
     </nav>
 
     <script>
-        // --- CREDENCIALES DE ADMINISTRADOR ---
+        // --- CREDENCIALES ---
         const USUARIO_ADMIN = "OskarML";
         const CLAVE_ADMIN = "AriYose"; 
-        
         const TZ_SINALOA = "America/Mazatlan";
 
         let BD = {
@@ -430,6 +403,8 @@
             registros: JSON.parse(localStorage.getItem('asist_registros')) || [],
             pagosDias: JSON.parse(localStorage.getItem('asist_pagos_dias')) || {}
         };
+
+        let ficherolSujeto = { tipo: null, empId: null, empleado: null, registroAbierto: null };
 
         function guardarBD() {
             localStorage.setItem('asist_empleados', JSON.stringify(BD.empleados));
@@ -466,101 +441,10 @@
             return `${añoInicio}-W${String(semana).padStart(2, '0')}`;
         }
 
-        // --- CÁMARA ---
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
+        // --- SISTEMA NATIVO DE CÁMARA (NUEVO) ---
+        const cameraInput = document.getElementById('camera-input');
 
-        async function iniciarCamara() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user", width: 400, height: 300 }, 
-                    audio: false 
-                });
-                video.srcObject = stream;
-            } catch (err) {
-                console.error("Cámara no disponible:", err);
-            }
-        }
-
-        function capturarFoto() {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth || 320;
-            canvas.height = video.videoHeight || 240;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            return canvas.toDataURL('image/jpeg', 0.7);
-        }
-
-        // --- NAVEGACIÓN Y BLOQUEO DE SEGURIDAD ---
-        let isAdminAutenticado = false;
-
-        function abrirLoginAdmin() {
-            document.getElementById('admin-user').value = '';
-            document.getElementById('admin-content').value = '';
-            cambiarVista('login-admin');
-        }
-
-        function cambiarVista(vistaId) {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            document.getElementById(`view-${vistaId}`).classList.add('active');
-            
-            const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(vistaId));
-            if(btnActivo) btnActivo.classList.add('active');
-
-            if (vistaId === 'checador') iniciarCamara();
-            if (vistaId === 'turnos') renderTurnosActivos();
-            if (vistaId === 'nomina') { generarSemanasSelect(); renderNomina(); }
-            if (vistaId === 'empleados') renderListaEmpleados();
-            if (vistaId === 'historial') { cargarFiltrosHistorial(); renderHistorial(); }
-        }
-
-        function verificarAdmin() {
-            const user = document.getElementById('admin-user').value;
-            const pass = document.getElementById('admin-pass').value;
-
-            if(user === USUARIO_ADMIN && pass === CLAVE_ADMIN) {
-                isAdminAutenticado = true;
-                
-                // Mostrar barra de navegación y cambiar botón superior
-                document.getElementById('admin-nav').style.display = 'flex';
-                document.getElementById('lock-btn').innerText = "🔓 Activo";
-                document.getElementById('lock-btn').style.backgroundColor = "var(--success)";
-                document.getElementById('lock-btn').style.color = "white";
-                
-                // Mandar directo al catálogo de personal
-                cambiarVista('empleados');
-            } else {
-                alert("Usuario o contraseña de administrador incorrectos.");
-            }
-        }
-
-        function cerrarSesiónAdmin() {
-            isAdminAutenticado = false;
-            
-            // Ocultar barra de navegación y reestablecer botón de bloqueo
-            document.getElementById('admin-nav').style.display = 'none';
-            document.getElementById('lock-btn').innerText = "🔒 Admin";
-            document.getElementById('lock-btn').style.backgroundColor = "var(--primary-light)";
-            document.getElementById('lock-btn').style.color = "var(--primary-dark)";
-            
-            // Limpiar inputs
-            document.getElementById('admin-user').value = '';
-            document.getElementById('admin-pass').value = '';
-            
-            // Regresar forzadamente al checador
-            cambiarVista('checador');
-            alert("Sesión de administrador cerrada. Pantallas bloqueadas.");
-        }
-
-        // --- CHECADOR ---
-        function cargarEmpleadosEnSelects() {
-            const selectCheck = document.getElementById('check-emp-select');
-            selectCheck.innerHTML = '<option value="">-- Selecciona tu Nombre --</option>';
-            BD.empleados.forEach(e => { selectCheck.innerHTML += `<option value="${e.id}">${e.nombre}</option>`; });
-        }
-
-        function procesarFichaje(tipo) {
+        function intentarFichaje(tipo) {
             const empId = document.getElementById('check-emp-select').value;
             const pin = document.getElementById('check-pin').value;
 
@@ -570,11 +454,33 @@
 
             const registroAbierto = BD.registros.find(r => r.empleadoId === empId && r.horaSalida === null);
 
-            if (tipo === 'entrada' && registroAbierto) return alert("Ya tienes un turno abierto.");
-            if (tipo === 'salida' && !registroAbierto) return alert("No tienes un turno abierto activo.");
+            if (tipo === 'entrada' && registroAbierto) return alert("Ya tienes un turno abierto de Entrada.");
+            if (tipo === 'salida' && !registroAbierto) return alert("No tienes un turno abierto de Entrada registrado.");
 
+            // Guardar contexto temporal para cuando responda la cámara
+            ficherolSujeto = { tipo, empId, empleado, registroAbierto };
+
+            // Disparar la ventana de la cámara del celular
+            cameraInput.click();
+        }
+
+        // Evento que se ejecuta en cuanto se toma y acepta la foto en el cel
+        cameraInput.addEventListener('change', function(e) {
+            if (!e.target.files || e.target.files.length === 0) return;
+            
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const fotoBase64 = event.target.result;
+                completarRegistroFichaje(fotoBase64);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function completarRegistroFichaje(fotoBase64) {
+            const { tipo, empId, empleado, registroAbierto } = ficherolSujeto;
             const timestampSinaloa = obtenerFechaSinaloa();
-            const fotoBase64 = capturarFoto();
 
             if (tipo === 'entrada') {
                 BD.registros.unshift({
@@ -592,18 +498,71 @@
                     timestampSalida: null,
                     fotoSalida: null
                 });
-                alert(`Entrada registrada para ${empleado.nombre}`);
+                alert(`✅ Entrada registrada exitosamente para ${empleado.nombre}`);
             } else {
                 registroAbierto.horaSalida = formatearHora(timestampSinaloa);
                 registroAbierto.timestampSalida = timestampSinaloa.toISOString();
                 registroAbierto.fotoSalida = fotoBase64;
-                alert(`Salida registrada para ${empleado.nombre}`);
+                alert(`✅ Salida registrada exitosamente para ${empleado.nombre}`);
             }
+
             guardarBD();
+            // Resetear
             document.getElementById('check-pin').value = '';
+            cameraInput.value = ''; // Limpiar input file
             cargarEmpleadosEnSelects();
         }
 
+        // --- NAVEGACIÓN ---
+        let isAdminAutenticado = false;
+
+        function abrirLoginAdmin() {
+            document.getElementById('admin-user').value = '';
+            document.getElementById('admin-pass').value = '';
+            cambiarVista('login-admin');
+        }
+
+        function cambiarVista(vistaId) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`view-${vistaId}`).classList.add('active');
+            
+            const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(vistaId));
+            if(btnActivo) btnActivo.classList.add('active');
+
+            if (vistaId === 'turnos') renderTurnosActivos();
+            if (vistaId === 'nomina') { generarSemanasSelect(); renderNomina(); }
+            if (vistaId === 'empleados') renderListaEmpleados();
+            if (vistaId === 'historial') { cargarFiltrosHistorial(); renderHistorial(); }
+        }
+
+        function verificarAdmin() {
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
+
+            if(user === USUARIO_ADMIN && pass === CLAVE_ADMIN) {
+                isAdminAutenticado = true;
+                document.getElementById('admin-nav').style.display = 'flex';
+                document.getElementById('lock-btn').innerText = "🔓 Activo";
+                document.getElementById('lock-btn').style.backgroundColor = "var(--success)";
+                document.getElementById('lock-btn').style.color = "white";
+                cambiarVista('empleados');
+            } else {
+                alert("Usuario o contraseña de administrador incorrectos.");
+            }
+        }
+
+        function cerrarSesiónAdmin() {
+            isAdminAutenticado = false;
+            document.getElementById('admin-nav').style.display = 'none';
+            document.getElementById('lock-btn').innerText = "🔒 Admin";
+            document.getElementById('lock-btn').style.backgroundColor = "var(--primary-light)";
+            document.getElementById('lock-btn').style.color = "var(--primary-dark)";
+            cambiarVista('checador');
+            alert("Sesión cerrada.");
+        }
+
+        // --- GESTIÓN DE TURNOS ---
         function renderTurnosActivos() {
             const contenedor = document.getElementById('lista-turnos-activos');
             contenedor.innerHTML = '';
@@ -627,7 +586,7 @@
             });
         }
 
-        // --- GESTIÓN DE PERSONAL ---
+        // --- CRUD EMPLEADOS ---
         function guardarEmpleado() {
             const id = document.getElementById('emp-id').value;
             const nombre = document.getElementById('emp-nombre').value.trim();
@@ -692,6 +651,12 @@
                         </div>
                     </div>`;
             });
+        }
+
+        function cargarEmpleadosEnSelects() {
+            const selectCheck = document.getElementById('check-emp-select');
+            selectCheck.innerHTML = '<option value="">-- Selecciona tu Nombre --</option>';
+            BD.empleados.forEach(e => { selectCheck.innerHTML += `<option value="${e.id}">${e.nombre}</option>`; });
         }
 
         // --- SISTEMA DE NÓMINA ---
@@ -877,7 +842,6 @@
 
         window.addEventListener('load', () => {
             cargarEmpleadosEnSelects();
-            iniciarCamara();
         });
     </script>
 </body>
