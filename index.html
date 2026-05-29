@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Control de Asistencia</title>
     
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- Web App Manifest (Inline via Data URI para mantener un solo archivo) -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2wgZGUgQXNpc3RlbmNpYSIsCiAgInNob3J0X25hbWUiOiAiQXNpc3RlbmNpYSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjNyNGY2IiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDt1dGY4LDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTIn ryeD0nMTAwJyBmaWxsPScjMjU2M2ViJy8+PGNoZWNrYm94IGZpbGw9J3doaXRlJy8+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 
     <style>
@@ -39,7 +37,7 @@
             background-color: var(--background);
             color: var(--text);
             line-height: 1.5;
-            padding-bottom: 80px; /* Espacio para el menú inferior */
+            padding-bottom: 80px;
         }
 
         header {
@@ -134,7 +132,34 @@
         .btn-danger { background-color: var(--danger); color: white; }
         .btn-secondary { background-color: var(--border); color: var(--text); }
 
-        /* Cámara de fotos */
+        /* Selector de días tipo Touch */
+        .days-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+            margin-top: 0.75rem;
+        }
+
+        .day-btn {
+            flex: 1;
+            padding: 0.6rem 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 6px;
+            background-color: #e2e8f0;
+            color: #475569;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+            transition: all 0.15s ease;
+        }
+
+        .day-btn.paid {
+            background-color: var(--success);
+            color: white;
+            border-color: #059669;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
         #camera-container {
             width: 100%;
             max-width: 320px;
@@ -162,7 +187,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Navegación Inferior */
         nav.nav-bottom {
             position: fixed;
             bottom: 0;
@@ -189,18 +213,9 @@
             padding: 0.25rem;
         }
 
-        .nav-item.active {
-            color: var(--primary);
-        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item svg { width: 24px; height: 24px; margin-bottom: 2px; fill: currentColor; }
 
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 2px;
-            fill: currentColor;
-        }
-
-        /* Listas y Tablas */
         .record-item {
             display: flex;
             align-items: center;
@@ -208,7 +223,6 @@
             padding: 0.75rem 0;
             border-bottom: 1px solid var(--border);
         }
-
         .record-item:last-child { border-bottom: none; }
 
         .badge {
@@ -224,12 +238,7 @@
         .view-section { display: none; }
         .view-section.active { display: block; }
 
-        /* Grid de empleados */
-        .grid-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
+        .grid-list { display: flex; flex-direction: column; gap: 0.75rem; }
 
         .employee-card {
             border: 1px solid var(--border);
@@ -258,7 +267,6 @@
 
     <div class="container">
 
-        <!-- VISTA: CHECADOR -->
         <section id="view-checador" class="view-section active">
             <div class="card">
                 <h2>⏱️ Registrar Entrada / Salida</h2>
@@ -283,31 +291,24 @@
             </div>
         </section>
 
-        <!-- VISTA: TURNOS ABIERTOS -->
         <section id="view-turnos" class="view-section">
             <div class="card">
                 <h2>🟢 Turnos Activos en Campo</h2>
-                <div id="lista-turnos-activos" class="grid-list">
-                    <!-- Dinámico -->
-                </div>
+                <div id="lista-turnos-activos" class="grid-list"></div>
             </div>
         </section>
 
-        <!-- VISTA: NÓMINA -->
         <section id="view-nomina" class="view-section">
             <div class="card">
-                <h2>📊 Nómina Semanal (Lun - Dom)</h2>
+                <h2>📊 Nómina Diario / Semanal</h2>
                 <div class="form-group">
                     <label for="nomina-semana-select">Seleccionar Semana</label>
                     <select id="nomina-semana-select" onchange="renderNomina()"></select>
                 </div>
-                <div id="lista-nomina" class="grid-list">
-                    <!-- Dinámico -->
-                </div>
+                <div id="lista-nomina" class="grid-list"></div>
             </div>
         </section>
 
-        <!-- VISTA: EMPLEADOS -->
         <section id="view-empleados" class="view-section">
             <div class="card" id="admin-login-card">
                 <h2>🔒 Acceso Administrador</h2>
@@ -342,29 +343,23 @@
 
                 <div class="card">
                     <h2>📋 Catálogo de Personal</h2>
-                    <div id="lista-empleados" class="grid-list">
-                        <!-- Dinámico -->
-                    </div>
+                    <div id="lista-empleados" class="grid-list"></div>
                 </div>
             </div>
         </section>
 
-        <!-- VISTA: HISTORIAL -->
         <section id="view-historial" class="view-section">
             <div class="card">
                 <h2>📜 Historial General de Checadas</h2>
                 <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
                     <select id="filtro-historial-emp" onchange="renderHistorial()"><option value="">Todos los empleados</option></select>
                 </div>
-                <div id="lista-historial" class="grid-list">
-                    <!-- Dinámico -->
-                </div>
+                <div id="lista-historial" class="grid-list"></div>
             </div>
         </section>
 
     </div>
 
-    <!-- Menú de Navegación Fijo Inferior -->
     <nav class="nav-bottom">
         <button class="nav-item active" onclick="cambiarVista('checador')">
             <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
@@ -389,23 +384,21 @@
     </nav>
 
     <script>
-        // --- CONFIGURACIÓN Y BASE DE DATOS LOCAL ---
-        const CLAVE_ADMIN = "12345"; // Contraseña del panel administrativo
+        const CLAVE_ADMIN = "12345"; 
         const TZ_SINALOA = "America/Mazatlan";
 
         let BD = {
             empleados: JSON.parse(localStorage.getItem('asist_empleados')) || [],
             registros: JSON.parse(localStorage.getItem('asist_registros')) || [],
-            pagos: JSON.parse(localStorage.getItem('asist_pagos')) || {} // { 'año-Wsemana-empId': true }
+            pagosDias: JSON.parse(localStorage.getItem('asist_pagos_dias')) || {} // Estructura: { 'semanaISO-empId-numeroDia': true }
         };
 
         function guardarBD() {
             localStorage.setItem('asist_empleados', JSON.stringify(BD.empleados));
             localStorage.setItem('asist_registros', JSON.stringify(BD.registros));
-            localStorage.setItem('asist_pagos', JSON.stringify(BD.pagos));
+            localStorage.setItem('asist_pagos_dias', JSON.stringify(BD.pagosDias));
         }
 
-        // --- MANEJO DE TIEMPO INTERNO (ZONA HORARIA SINALOA) ---
         function obtenerFechaSinaloa() {
             const ahora = new Date();
             const dtf = new Intl.DateTimeFormat('en-US', {
@@ -413,7 +406,6 @@
                 year: 'numeric', month: '2-digit', day: '2-digit',
                 hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
             });
-            
             const [{ value: m },,{ value: d },,{ value: y },,{ value: hr },,{ value: min },,{ value: seg }] = dtf.formatToParts(ahora);
             return new Date(`${y}-${m}-${d}T${hr}:${min}:${seg}`);
         }
@@ -448,7 +440,7 @@
                 });
                 video.srcObject = stream;
             } catch (err) {
-                console.error("Error al acceder a la cámara: ", err);
+                console.error("Cámara no disponible:", err);
             }
         }
 
@@ -460,13 +452,12 @@
             return canvas.toDataURL('image/jpeg', 0.7);
         }
 
-        // --- SISTEMA DE NAVEGACIÓN ---
+        // --- NAVEGACIÓN ---
         let isAdminAutenticado = false;
 
         function cambiarVista(vistaId) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
             document.getElementById(`view-${vistaId}`).classList.add('active');
             
             const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(vistaId));
@@ -479,66 +470,52 @@
             if (vistaId === 'historial') { cargarFiltrosHistorial(); renderHistorial(); }
         }
 
-        function evaluarPanelAdmin() {
-            if (isAdminAutenticado) {
-                document.getElementById('admin-login-card').style.display = 'none';
-                document.getElementById('admin-content').style.display = 'block';
-                renderListaEmpleados();
-            } else {
-                document.getElementById('admin-login-card').style.display = 'block';
-                document.getElementById('admin-content').style.display = 'none';
-            }
-        }
-
         function verificarAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === CLAVE_ADMIN) {
+            if(document.getElementById('admin-pass').value === CLAVE_ADMIN) {
                 isAdminAutenticado = true;
                 evaluarPanelAdmin();
             } else {
-                alert("Contraseña de administrador incorrecta.");
+                alert("Contraseña incorrecta.");
             }
         }
 
-        // --- LÓGICA DEL CHECADOR (REGISTROS DE ASISTENCIA) ---
+        function evaluarPanelAdmin() {
+            document.getElementById('admin-login-card').style.display = isAdminAutenticado ? 'none' : 'block';
+            document.getElementById('admin-content').style.display = isAdminAutenticado ? 'block' : 'none';
+            if(isAdminAutenticado) renderListaEmpleados();
+        }
+
+        // --- LÓGICA CHECADOR ---
         function cargarEmpleadosEnSelects() {
             const selectCheck = document.getElementById('check-emp-select');
             selectCheck.innerHTML = '<option value="">-- Selecciona tu Nombre --</option>';
-            BD.empleados.forEach(e => {
-                selectCheck.innerHTML += `<option value="${e.id}">${e.nombre}</option>`;
-            });
+            BD.empleados.forEach(e => { selectCheck.innerHTML += `<option value="${e.id}">${e.nombre}</option>`; });
         }
 
         function procesarFichaje(tipo) {
             const empId = document.getElementById('check-emp-select').value;
             const pin = document.getElementById('check-pin').value;
 
-            if (!empId) return alert("Selecciona un empleado de la lista.");
-            if (!pin) return alert("Escribe tu PIN de seguridad.");
-
+            if (!empId || !pin) return alert("Selecciona tu nombre y escribe tu PIN.");
             const empleado = BD.empleados.find(e => e.id === empId);
             if (empleado.pin !== pin) return alert("PIN incorrecto.");
 
-            // CORREGIDO: Ahora busca adecuadamente usando 'horaSalida'
             const registroAbierto = BD.registros.find(r => r.empleadoId === empId && r.horaSalida === null);
 
-            if (tipo === 'entrada' && registroAbierto) {
-                return alert(`Ya cuentas con una entrada registrada abierta el ${registroAbierto.fecha} a las ${registroAbierto.horaEntrada}. Debes registrar salida primero.`);
-            }
-            if (tipo === 'salida' && !registroAbierto) {
-                return alert("No tienes ningún turno abierto. Registra una entrada primero.");
-            }
+            if (tipo === 'entrada' && registroAbierto) return alert("Ya tienes un turno abierto.");
+            if (tipo === 'salida' && !registroAbierto) return alert("No tienes un turno abierto.");
 
             const timestampSinaloa = obtenerFechaSinaloa();
             const fotoBase64 = capturarFoto();
 
             if (tipo === 'entrada') {
-                const nuevoRegistro = {
+                BD.registros.unshift({
                     id: 'reg_' + Date.now(),
                     empleadoId: empId,
                     empleadoNombre: empleado.nombre,
                     sueldoPorHora: empleado.sueldo,
                     fecha: formatearFecha(timestampSinaloa),
+                    diaSemana: timestampSinaloa.getDay() || 7, // 1=Lun, 7=Dom
                     semanaISO: obtenerSemanaISO(timestampSinaloa),
                     horaEntrada: formatearHora(timestampSinaloa),
                     timestampEntrada: timestampSinaloa.toISOString(),
@@ -546,33 +523,27 @@
                     horaSalida: null,
                     timestampSalida: null,
                     fotoSalida: null
-                };
-                BD.registros.unshift(nuevoRegistro);
-                alert(`Entrada registrada exitosamente para ${empleado.nombre}`);
+                });
+                alert(`Entrada registrada para ${empleado.nombre}`);
             } else {
                 registroAbierto.horaSalida = formatearHora(timestampSinaloa);
                 registroAbierto.timestampSalida = timestampSinaloa.toISOString();
                 registroAbierto.fotoSalida = fotoBase64;
-                alert(`Salida registrada exitosamente para ${empleado.nombre}. ¡Buen descanso!`);
+                alert(`Salida registrada para ${empleado.nombre}`);
             }
-
             guardarBD();
-            document.getElementById('check-pin').value = ''; 
+            document.getElementById('check-pin').value = '';
             cargarEmpleadosEnSelects();
         }
 
-        // --- VISTA: TURNOS ACTIVOS ---
         function renderTurnosActivos() {
             const contenedor = document.getElementById('lista-turnos-activos');
             contenedor.innerHTML = '';
-            // CORREGIDO: Ahora filtra usando correctamente la propiedad 'horaSalida'
             const activos = BD.registros.filter(r => r.horaSalida === null);
-
             if(activos.length === 0) {
-                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No hay personal laborando en este momento.</p>';
+                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No hay personal laborando.</p>';
                 return;
             }
-
             activos.forEach(r => {
                 contenedor.innerHTML += `
                     <div class="record-item">
@@ -580,37 +551,29 @@
                             <img src="${r.fotoEntrada}" class="photo-preview">
                             <div>
                                 <strong>${r.empleadoNombre}</strong><br>
-                                <small style="color: var(--text-light)">Inició Entrada: ${r.fecha} | ${r.horaEntrada}</small>
+                                <small style="color: var(--text-light)">Inició: ${r.fecha} a las ${r.horaEntrada}</small>
                             </div>
                         </div>
                         <span class="badge badge-success">Activo</span>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
-        // --- GESTIÓN DE EMPLEADOS (CRUD) ---
+        // --- GESTIÓN DE PERSONAL ---
         function guardarEmpleado() {
             const id = document.getElementById('emp-id').value;
             const nombre = document.getElementById('emp-nombre').value.trim();
             const pin = document.getElementById('emp-pin').value.trim();
             const sueldo = parseFloat(document.getElementById('emp-sueldo').value);
 
-            if(!nombre || !pin || isNaN(sueldo)) return alert("Completa todos los campos correctamente.");
-            if(pin.length !== 4 || isNaN(pin)) return alert("El PIN debe ser estrictamente de 4 números.");
+            if(!nombre || !pin || isNaN(sueldo) || pin.length !== 4) return alert("Verifica los datos.");
 
             if(id) {
                 const index = BD.empleados.findIndex(e => e.id === id);
-                if(index !== -1) {
-                    BD.empleados[index] = { id, nombre, pin, sueldo };
-                }
+                if(index !== -1) BD.empleados[index] = { id, nombre, pin, sueldo };
             } else {
-                BD.empleados.push({
-                    id: 'emp_' + Date.now(),
-                    nombre, pin, sueldo
-                });
+                BD.empleados.push({ id: 'emp_' + Date.now(), nombre, pin, sueldo });
             }
-
             guardarBD();
             limpiarFormEmpleado();
             renderListaEmpleados();
@@ -620,7 +583,7 @@
         function editarEmpleado(id) {
             const emp = BD.empleados.find(e => e.id === id);
             if(!emp) return;
-            document.getElementById('form-emp-title').innerText = "📝 Editar Datos de Empleado";
+            document.getElementById('form-emp-title').innerText = "📝 Editar Datos";
             document.getElementById('emp-id').value = emp.id;
             document.getElementById('emp-nombre').value = emp.nombre;
             document.getElementById('emp-pin').value = emp.pin;
@@ -628,7 +591,7 @@
         }
 
         function eliminarEmpleado(id) {
-            if(confirm("¿Estás seguro de dar de baja a este empleado? El historial de registros se mantendrá.")) {
+            if(confirm("¿Dar de baja a este empleado?")) {
                 BD.empleados = BD.empleados.filter(e => e.id !== id);
                 guardarBD();
                 renderListaEmpleados();
@@ -647,124 +610,132 @@
         function renderListaEmpleados() {
             const contenedor = document.getElementById('lista-empleados');
             contenedor.innerHTML = '';
-            if(BD.empleados.length === 0) {
-                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No hay empleados registrados en el catálogo.</p>';
-                return;
-            }
+            if(BD.empleados.length === 0) return contenedor.innerHTML = '<p style="text-align: center;">Sin personal.</p>';
             BD.empleados.forEach(e => {
                 contenedor.innerHTML += `
                     <div class="employee-card">
                         <div>
                             <strong>${e.nombre}</strong><br>
-                            <small style="color: var(--text-light)">Sueldo: $${e.sueldo}/hr | PIN: <span class="pin-display">${e.pin}</span></small>
+                            <small style="color: var(--text-light)">$${e.sueldo}/hr | PIN: <span class="pin-display">${e.pin}</span></small>
                         </div>
                         <div style="display: flex; gap: 0.25rem;">
                             <button class="btn-primary" style="padding: 0.4rem; font-size: 0.8rem;" onclick="editarEmpleado('${e.id}')">Editar</button>
                             <button class="btn-danger" style="padding: 0.4rem; font-size: 0.8rem;" onclick="eliminarEmpleado('${e.id}')">Baja</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
-        // --- CÓMPUTO DE NÓMINA ---
+        // --- SISTEMA DE NÓMINA POR DÍA DIARIO ---
         function generarSemanasSelect() {
             const select = document.getElementById('nomina-semana-select');
-            const semanasUnicas = new Set();
-            
-            semanasUnicas.add(obtenerSemanaISO(obtenerFechaSinaloa()));
+            const semanasUnicas = new Set([obtenerSemanaISO(obtenerFechaSinaloa())]);
             BD.registros.forEach(r => { if(r.semanaISO) semanasUnicas.add(r.semanaISO); });
 
-            const seleccionadaAnteriormente = select.value;
+            const seleccionada = select.value;
             select.innerHTML = '';
-            
             Array.from(semanasUnicas).sort().reverse().forEach(sem => {
                 select.innerHTML += `<option value="${sem}">Semana ${sem}</option>`;
             });
-
-            if(seleccionadaAnteriormente) select.value = seleccionadaAnteriormente;
+            if(seleccionada) select.value = seleccionada;
         }
 
         function calcularHorasYPago(reg) {
             if (!reg.timestampEntrada || !reg.timestampSalida) return { horas: 0, pago: 0 };
-            const t1 = new Date(reg.timestampEntrada);
-            const t2 = new Date(reg.timestampSalida);
-            const difMiliseconds = t2 - t1;
-            const horas = Math.max(0, difMiliseconds / (1000 * 60 * 60)); 
-            const pago = horas * (reg.sueldoPorHora || 0);
-            return { horas, pago };
+            const horas = Math.max(0, (new Date(reg.timestampSalida) - new Date(reg.timestampEntrada)) / (1000 * 60 * 60));
+            return { horas, pago: horas * (reg.sueldoPorHora || 0) };
         }
 
         function renderNomina() {
             const semana = document.getElementById('nomina-semana-select').value;
             const contenedor = document.getElementById('lista-nomina');
             contenedor.innerHTML = '';
-
             if(!semana) return;
 
-            const resumenEmpleados = {};
-
+            const resumen = {};
             BD.empleados.forEach(e => {
-                resumenEmpleados[e.id] = { nombre: e.nombre, horasTotales: 0, pagoTotal: 0, registrosValidos: 0 };
+                resumen[e.id] = { nombre: e.nombre, totalAcumulado: 0, totalPagado: 0, totalPendiente: 0, desgloseDias: {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0} };
             });
 
+            // Procesar todas las checadas hechas en esta semana específica
             BD.registros.forEach(r => {
-                if(r.semanaISO === Array.from(semana).join('') && r.timestampSalida) {
-                    if(!resumenEmpleados[r.empleadoId]) {
-                        resumenEmpleados[r.empleadoId] = { nombre: r.empleadoNombre, horasTotales: 0, pagoTotal: 0, registrosValidos: 0 };
+                if(r.semanaISO === semana && r.timestampSalida) {
+                    if(!resumen[r.empleadoId]) {
+                        resumen[r.empleadoId] = { nombre: r.empleadoNombre, totalAcumulado: 0, totalPagado: 0, totalPendiente: 0, desgloseDias: {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0} };
                     }
                     const calculo = calcularHorasYPago(r);
-                    resumenEmpleados[r.empleadoId].horasTotales += calculo.horas;
-                    resumenEmpleados[r.empleadoId].pagoTotal += calculo.pago;
-                    resumenEmpleados[r.empleadoId].registrosValidos++;
+                    const diaNum = r.diaSemana || 1; 
+                    resumen[r.empleadoId].desgloseDias[diaNum] += calculo.pago;
+                    resumen[r.empleadoId].totalAcumulado += calculo.pago;
                 }
             });
 
-            Object.keys(resumenEmpleados).forEach(empId => {
-                const item = resumenEmpleados[empId];
-                const llavePago = `${semana}-${empId}`;
-                const esPagado = BD.pagos[llavePago] || false;
+            Object.keys(resumen).forEach(empId => {
+                const item = resumen[empId];
+                
+                // Calcular cuánto se ha pagado en base a los botones touch activos
+                let dineroPagado = 0;
+                for(let d=1; d<=7; d++) {
+                    if(BD.pagosDias[`${semana}-${empId}-${d}`]) {
+                        dineroPagado += item.desgloseDias[d];
+                    }
+                }
+                item.totalPagado = dineroPagado;
+                item.totalPendiente = Math.max(0, item.totalAcumulado - item.totalPagado);
+
+                const nombresDias = ["", "L", "M", "M", "J", "V", "S", "D"];
+                let botonesHTML = '';
+                
+                for(let d=1; d<=7; d++) {
+                    const llaveDia = `${semana}-${empId}-${d}`;
+                    const estaPagado = BD.pagosDias[llaveDia] ? 'paid' : '';
+                    const dineroDeEseDia = item.desgloseDias[d] > 0 ? `($${Math.round(item.desgloseDias[d])})` : '';
+                    
+                    botonesHTML += `
+                        <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+                            <button class="day-btn ${estaPagado}" onclick="conmutarDiaPago('${semana}', '${empId}', ${d})">
+                                ${nombresDias[d]}
+                            </button>
+                            <span style="font-size:0.6rem; color:var(--text-light); margin-top:2px;">${dineroDeEseDia ? '✔️' : ''}</span>
+                        </div>`;
+                }
 
                 contenedor.innerHTML += `
-                    <div class="card" style="border-left: 5px solid ${esPagado ? 'var(--success)' : 'var(--warning)'}">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="card" style="border-left: 5px solid ${item.totalPendiente === 0 ? 'var(--success)' : 'var(--warning)'}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                             <div>
-                                <strong>${item.nombre}</strong><br>
-                                <small style="color: var(--text-light)">Turnos cubiertos: ${item.registrosValidos}</small><br>
-                                <small style="color: var(--text-light)">Horas acumuladas: ${item.horasTotales.toFixed(2)} hrs</small>
+                                <strong style="font-size:1.1rem">${item.nombre}</strong><br>
+                                <small style="color: var(--text-light)">Total Trabajado: $${item.totalAcumulado.toFixed(2)}</small>
                             </div>
                             <div style="text-align: right;">
-                                <span style="font-size: 1.2rem; font-weight: bold; color: var(--text)">$${item.pagoTotal.toFixed(2)}</span><br>
-                                <span class="badge ${esPagado ? 'badge-success' : 'badge-warning'}">${esPagado ? 'Pagado' : 'Pendiente'}</span>
+                                <div style="font-size:0.8rem; color:var(--success)"><b>Adelantado:</b> $${item.totalPagado.toFixed(2)}</div>
+                                <div style="font-size:0.95rem; color:var(--danger)"><b>Pendiente:</b> $${item.totalPendiente.toFixed(2)}</div>
                             </div>
                         </div>
-                        <div style="margin-top: 0.75rem;">
-                            <button class="${esPagado ? 'btn-secondary' : 'btn-success'}" style="padding: 0.4rem; font-size: 0.85rem;" onclick="conmutarEstadoPago('${llavePago}')">
-                                ${esPagado ? '🔴 Marcar como No Pagado' : '🟢 Marcar como Pagado'}
-                            </button>
+                        <div style="font-size:0.8rem; font-weight:500; color:var(--text-light); margin-bottom:0.25rem;">Marcar días liquidados:</div>
+                        <div class="days-container">
+                            ${botonesHTML}
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
-        function conmutarEstadoPago(llavePago) {
-            if(BD.pagos[llavePago]) {
-                delete BD.pagos[llavePago];
+        function conmutarDiaPago(semana, empId, dia) {
+            const llave = `${semana}-${empId}-${dia}`;
+            if(BD.pagosDias[llave]) {
+                delete BD.pagosDias[llave];
             } else {
-                BD.pagos[llavePago] = true;
+                BD.pagosDias[llave] = true;
             }
             guardarBD();
             renderNomina();
         }
 
-        // --- HISTORIAL GENERAL Y EDICIÓN MANUAL ---
+        // --- HISTORIAL ---
         function cargarFiltrosHistorial() {
             const select = document.getElementById('filtro-historial-emp');
             select.innerHTML = '<option value="">Todos los empleados</option>';
-            BD.empleados.forEach(e => {
-                select.innerHTML += `<option value="${e.id}">${e.nombre}</option>`;
-            });
+            BD.empleados.forEach(e => { select.innerHTML += `<option value="${e.id}">${e.nombre}</option>`; });
         }
 
         function renderHistorial() {
@@ -773,12 +744,10 @@
             contenedor.innerHTML = '';
 
             let filtrados = BD.registros;
-            if(empFiltro) {
-                filtrados = filtrados.filter(r => r.empleadoId === empFiltro);
-            }
+            if(empFiltro) filtrados = filtrados.filter(r => r.empleadoId === empFiltro);
 
             if(filtrados.length === 0) {
-                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No se encontraron registros de asistencia.</p>';
+                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">Sin registros.</p>';
                 return;
             }
 
@@ -790,15 +759,9 @@
                             <strong>${r.empleadoNombre}</strong>
                             <small class="badge badge-success">${r.fecha}</small>
                         </div>
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
-                            <div>
-                                <p style="font-size:0.75rem; color:var(--text-light)">Foto Entrada</p>
-                                <img src="${r.fotoEntrada || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2230%22 height=%2230%22><rect fill=%22%23ccc%22 width=%22100%%22 height=%22100%%22/></svg>'}" class="photo-preview">
-                            </div>
-                            <div>
-                                <p style="font-size:0.75rem; color:var(--text-light)">Foto Salida</p>
-                                <img src="${r.fotoSalida || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2230%22 height=%2230%22><rect fill=%22%23ccc%22 width=%22100%%22 height=%22100%%22/></svg>'}" class="photo-preview">
-                            </div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <img src="${r.fotoEntrada || ''}" class="photo-preview">
+                            <img src="${r.fotoSalida || ''}" class="photo-preview">
                             <div style="flex-grow:1; text-align: right;">
                                 <p>🛫 <b>Entrada:</b> ${r.horaEntrada}</p>
                                 <p>🛬 <b>Salida:</b> ${r.horaSalida || '<span style="color:orange; font-weight:bold;">Abierto</span>'}</p>
@@ -809,8 +772,7 @@
                             <button class="btn-primary" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="editarRegistroManual('${r.id}')">Ajustar Tiempos</button>
                             <button class="btn-danger" style="padding: 0.3rem 0.5rem; font-size: 0.75rem; width: auto;" onclick="eliminarRegistro('${r.id}')">❌</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
@@ -818,39 +780,35 @@
             const reg = BD.registros.find(r => r.id === id);
             if(!reg) return;
 
-            const nuevaHoraEntrada = prompt("Modificar hora de Entrada (Formato HH:MM:SS)", reg.horaEntrada);
+            const nuevaHoraEntrada = prompt("Modificar Entrada (HH:MM:SS)", reg.horaEntrada);
             if(nuevaHoraEntrada === null) return; 
 
             let nuevaHoraSalida = reg.horaSalida;
             if(reg.horaSalida !== null) {
-                nuevaHoraSalida = prompt("Modificar hora de Salida (Formato HH:MM:SS)", reg.horaSalida);
+                nuevaHoraSalida = prompt("Modificar Salida (HH:MM:SS)", reg.horaSalida);
             }
 
             const [dia, mes, año] = reg.fecha.split('/');
-            
             if (nuevaHoraEntrada) {
                 reg.horaEntrada = nuevaHoraEntrada;
                 reg.timestampEntrada = new Date(`${año}-${mes}-${dia}T${nuevaHoraEntrada}`).toISOString();
             }
-
             if (nuevaHoraSalida) {
                 reg.horaSalida = nuevaHoraSalida;
                 reg.timestampSalida = new Date(`${año}-${mes}-${dia}T${nuevaHoraSalida}`).toISOString();
             }
-
             guardarBD();
             renderHistorial();
         }
 
         function eliminarRegistro(id) {
-            if(confirm("¿Eliminar por completo este registro del historial financiero?")) {
+            if(confirm("¿Eliminar este registro?")) {
                 BD.registros = BD.registros.filter(r => r.id !== id);
                 guardarBD();
                 renderHistorial();
             }
         }
 
-        // --- INICIALIZACIÓN INMEDIATA ---
         window.addEventListener('load', () => {
             cargarEmpleadosEnSelects();
             iniciarCamara();
