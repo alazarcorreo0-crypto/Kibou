@@ -195,6 +195,21 @@
             background-color: #e5e7eb;
         }
 
+        .photo-blank {
+            width: 65px;
+            height: 65px;
+            border-radius: 10px;
+            border: 2px dashed #cbd5e1;
+            background-color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 0.65rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
         /* Modal para la foto en grande */
         .img-modal {
             display: none; 
@@ -564,7 +579,7 @@
             cargarEmpleadosEnSelects();
         }
 
-        // --- CORRECCIÓN: VISUALIZADOR DE FOTO EN GRANDE SEGURO POR ID ---
+        // --- VISUALIZADOR DE FOTO EN GRANDE SEGURO POR ID ---
         function abrirFotoPorId(registroId, tipoFoto) {
             const reg = BD.registros.find(r => r.id === registroId);
             if (!reg) return;
@@ -858,9 +873,15 @@
 
             filtrados.forEach(r => {
                 const calculo = calcularHorasYPago(r);
-                
                 const imgEntradaSrc = r.fotoEntrada || '';
-                const imgSalidaSrc = r.fotoSalida || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewBox="0 0 24 24" fill="%23cbd5e1"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>';
+
+                // CORRECCIÓN AQUÍ: Si el turno está abierto, creamos un recuadro limpio con diseño y sin romper el HTML.
+                let bloqueSalidaHTML = '';
+                if (r.fotoSalida && r.fotoSalida !== '') {
+                    bloqueSalidaHTML = `<img src="${r.fotoSalida}" class="photo-preview" onclick="abrirFotoPorId('${r.id}', 'salida')" alt="Salida">`;
+                } else {
+                    bloqueSalidaHTML = `<div class="photo-blank">Turno<br>Abierto</div>`;
+                }
 
                 contenedor.innerHTML += `
                     <div class="card" style="font-size: 0.9rem;">
@@ -877,7 +898,7 @@
 
                             <div class="photo-wrapper">
                                 <span>Salida</span>
-                                <img src="${imgSalidaSrc}" class="photo-preview" onclick="abrirFotoPorId('${r.id}', 'salida')" alt="Salida">
+                                ${bloqueSalidaHTML}
                             </div>
 
                             <div style="flex-grow:1; text-align: right; font-size: 0.85rem;">
