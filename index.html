@@ -1,609 +1,857 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kibou Fashion - Reloj Checador V5</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Control de Asistencia</title>
+    
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2wgZGUgQXNpc3RlbmNpYSIsCiAgInNob3J0X25hbWUiOiAiQXNpc3RlbmNpYSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjNyNGY2IiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDt1dGY4LDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTIn ryeD0nMTAwJyBmaWxsPScjMjU2M2ViJy8+PGNoZWNrYm94IGZpbGw9J3doaXRlJy8+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            padding-bottom: 80px; /* Espacio para el menú inferior */
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tz-badge {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.375rem;
+            color: var(--text-light);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: var(--background);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-secondary { background-color: var(--border); color: var(--text); }
+
+        /* Cámara de fotos */
+        #camera-container {
+            width: 100%;
+            max-width: 320px;
+            margin: 1rem auto;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 4/3;
+            position: relative;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #canvas { display: none; }
+
+        .photo-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        /* Navegación Inferior */
+        nav.nav-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.75rem;
+            width: auto;
+            padding: 0.25rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+            fill: currentColor;
+        }
+
+        /* Listas y Tablas */
+        .record-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .record-item:last-child { border-bottom: none; }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        /* Grid de empleados */
+        .grid-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .employee-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pin-display {
+            letter-spacing: 3px;
+            font-family: monospace;
+            background: var(--background);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen flex justify-center p-4 selection:bg-pink-500/30">
+<body>
 
-  <div id="app" class="w-full max-w-md flex flex-col gap-5 pt-6 pb-24">
-    
-    <div class="flex items-center justify-between mb-1">
-      <div>
-        <h1 class="text-3xl font-black text-pink-500 tracking-tighter drop-shadow-[0_2px_10px_rgba(236,72,153,0.15)]">Kibou Fashion</h1>
-        <p class="text-xs text-zinc-400 font-medium mt-0.5">Control de Asistencia y Nómina VIP</p>
-      </div>
-      
-      <div class="flex flex-col items-end gap-1">
-        <label class="text-[9px] font-bold uppercase tracking-wider text-zinc-500">Modo Admin</label>
-        <button id="btn-toggle-admin" class="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-xl text-xs font-bold text-zinc-400 transition-all flex items-center gap-1.5">
-          <span id="admin-dot" class="w-2 h-2 rounded-full bg-zinc-600"></span>
-          <span id="admin-txt">Trabajador</span>
+    <header>
+        <span>Asistencia</span>
+        <span class="tz-badge">Culiacán, Sin.</span>
+    </header>
+
+    <div class="container">
+
+        <section id="view-checador" class="view-section active">
+            <div class="card">
+                <h2>⏱️ Registrar Entrada / Salida</h2>
+                <div class="form-group">
+                    <label for="check-emp-select">Selecciona tu Nombre</label>
+                    <select id="check-emp-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="check-pin">Ingresa tu PIN (4 dígitos)</label>
+                    <input type="password" id="check-pin" pattern="\d*" maxlength="4" placeholder="••••" inputmode="numeric">
+                </div>
+                
+                <div id="camera-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas"></canvas>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button class="btn-success" onclick="procesarFichaje('entrada')">Entrada</button>
+                    <button class="btn-danger" onclick="procesarFichaje('salida')">Salida</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-turnos" class="view-section">
+            <div class="card">
+                <h2>🟢 Turnos Activos en Campo</h2>
+                <div id="lista-turnos-activos" class="grid-list">
+                    </div>
+            </div>
+        </section>
+
+        <section id="view-nomina" class="view-section">
+            <div class="card">
+                <h2>📊 Nómina Semanal (Lun - Dom)</h2>
+                <div class="form-group">
+                    <label for="nomina-semana-select">Seleccionar Semana</label>
+                    <select id="nomina-semana-select" onchange="renderNomina()"></select>
+                </div>
+                <div id="lista-nomina" class="grid-list">
+                    </div>
+            </div>
+        </section>
+
+        <section id="view-empleados" class="view-section">
+            <div class="card" id="admin-login-card">
+                <h2>🔒 Acceso Administrador</h2>
+                <div class="form-group">
+                    <label for="admin-pass">Contraseña</label>
+                    <input type="password" id="admin-pass" placeholder="Ingresa clave de admin">
+                </div>
+                <button class="btn-primary" onclick="verificarAdmin()">Ingresar</button>
+            </div>
+
+            <div id="admin-content" style="display: none;">
+                <div class="card">
+                    <h2 id="form-emp-title">👤 Crear / Editar Empleado</h2>
+                    <input type="hidden" id="emp-id">
+                    <div class="form-group">
+                        <label for="emp-nombre">Nombre Completo</label>
+                        <input type="text" id="emp-nombre" placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label for="emp-pin">PIN de Acceso (4 dígitos)</label>
+                        <input type="text" id="emp-pin" pattern="\d*" maxlength="4" placeholder="1234">
+                    </div>
+                    <div class="form-group">
+                        <label for="emp-sueldo">Sueldo por Hora ($)</label>
+                        <input type="number" id="emp-sueldo" placeholder="Ej. 100">
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn-success" onclick="guardarEmpleado()">Guardar</button>
+                        <button class="btn-secondary" onclick="limpiarFormEmpleado()">Cancelar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📋 Catálogo de Personal</h2>
+                    <div id="lista-empleados" class="grid-list">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-historial" class="view-section">
+            <div class="card">
+                <h2>📜 Historial General de Checadas</h2>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <select id="filtro-historial-emp" onchange="renderHistorial()"><option value="">Todos los empleados</option></select>
+                </div>
+                <div id="lista-historial" class="grid-list">
+                    </div>
+            </div>
+        </section>
+
+    </div>
+
+    <nav class="nav-bottom">
+        <button class="nav-item active" onclick="cambiarVista('checador')">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            Checador
         </button>
-      </div>
-    </div>
-
-    <div id="panel-admin-totales" class="hidden flex flex-col gap-4">
-      
-      <div class="flex bg-zinc-900 p-1 rounded-xl border border-zinc-800">
-        <button id="tab-sub-turnos" class="flex-1 py-2 text-xs font-bold rounded-lg bg-pink-600 text-white transition-all">📅 Control de Turnos</button>
-        <button id="tab-sub-nomina" class="flex-1 py-2 text-xs font-bold rounded-lg text-zinc-400 hover:text-white transition-all">💰 Resumen de Nómina</button>
-      </div>
-
-      <div id="vista-admin-turnos" class="flex flex-col gap-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">⏱️ Horas Filtradas</span>
-            <span id="total-horas-txt" class="text-2xl font-black text-white mt-1">0.00h</span>
-          </div>
-          <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-pink-400">💵 Total Neto</span>
-            <span id="total-dinero-txt" class="text-2xl font-black text-pink-400 mt-1">$0.00</span>
-          </div>
-        </div>
-      </div>
-
-      <div id="vista-admin-nomina" class="hidden bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 shadow-xl">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-pink-500">💰 Totales de Nómina a Pagar esta Semana</h3>
-        <div id="lista-totales-nomina-empleados" class="flex flex-col gap-2">
-          </div>
-      </div>
-
-      <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 shadow-md">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-pink-500">👥 Agregar Colaborador</h3>
-        <div class="flex flex-col gap-2 bg-zinc-950 p-3 rounded-xl border border-zinc-800/60">
-          <input type="text" id="nuevo-usuario-input" placeholder="Nombre completo" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white outline-none focus:border-pink-500">
-          <div class="grid grid-cols-2 gap-2">
-            <input type="text" id="nuevo-pin-input" placeholder="PIN (4 dig)" maxlength="4" class="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-center text-white outline-none focus:border-pink-500">
-            <input type="number" id="nuevo-sueldo-input" placeholder="Sueldo por Hora ($)" step="0.01" class="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-center text-emerald-400 font-bold outline-none focus:border-pink-500">
-          </div>
-          <button type="button" id="btn-add-user" class="w-full mt-1 bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-lg text-xs transition-colors">➕ Dar de Alta Trabajador</button>
-        </div>
-        <div class="flex flex-col gap-1.5 max-h-36 overflow-y-auto" id="lista-usuarios-admin"></div>
-      </div>
-    </div>
-
-    <div id="panel-interfaz-fichaje" class="bg-zinc-900/60 border border-zinc-800/80 p-5 rounded-3xl flex flex-col gap-4 shadow-xl">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-bold text-white tracking-wide">Estación de Fichaje Digital</h2>
-        <span id="badge-estado-turno" class="text-[10px] px-2.5 py-1 rounded-full font-bold uppercase bg-zinc-800 text-zinc-400">Consultando...</span>
-      </div>
-
-      <div>
-        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">👤 Selecciona tu Nombre</label>
-        <select id="nombre-select" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none focus:border-pink-500 transition-colors" style="color-scheme: dark;">
-          </select>
-      </div>
-
-      <div id="wrapper-pin-trabajador">
-        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">🔒 Ingresa tu PIN Secreto</label>
-        <input type="password" id="pin-trabajador-input" placeholder="••••" maxlength="4" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-center text-lg font-mono font-black tracking-widest text-white outline-none focus:border-pink-500 transition-colors">
-      </div>
-
-      <div id="opciones-tiempo-admin" class="hidden bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
-        <label class="text-[10px] font-bold text-zinc-500 uppercase">Fecha Registro (Admin)</label>
-        <input type="date" id="fecha-input" class="w-full bg-zinc-900 text-xs text-white p-2 rounded-lg mt-1" style="color-scheme: dark;">
-      </div>
-
-      <div class="mt-1 flex flex-col gap-3">
-        <input type="file" id="foto-input" accept="image/*" capture="camera" class="hidden">
-        <button type="button" id="btn-accion-fichaje" class="w-full py-4 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-pink-950/50 transition-all flex items-center justify-center gap-2">
-          📸 Capturar Registro
+        <button class="nav-item" onclick="cambiarVista('turnos')">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm3.3 14.3L11 13.5V8h1.5v4.7l3.6 2.2-.8 1.4z"/></svg>
+            Turnos
         </button>
-        <button type="button" id="btn-enviar-reporte-pdf" class="w-full py-2.5 bg-zinc-900 border border-zinc-800 text-zinc-300 font-bold rounded-xl text-xs flex items-center justify-center gap-2">
-          📄 Generar Reporte de Nómina Seguro
+        <button class="nav-item" onclick="cambiarVista('nomina')">
+            <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            Nómina
         </button>
-      </div>
+        <button class="nav-item" onclick="cambiarVista('empleados')">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>
+            Personal
+        </button>
+        <button class="nav-item" onclick="cambiarVista('historial')">
+            <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+            Historial
+        </button>
+    </nav>
 
-      <div id="preview-container" class="hidden relative rounded-xl overflow-hidden border border-zinc-800">
-        <img id="foto-preview" class="w-full h-32 object-cover opacity-60" src="" alt="Captura">
-      </div>
-    </div>
+    <script>
+        // --- CONFIGURACIÓN Y BASE DE DATOS LOCAL ---
+        const CLAVE_ADMIN = "12345"; // Contraseña del panel administrativo
+        const TZ_SINALOA = "America/Mazatlan";
 
-    <div id="panel-historial-admin" class="hidden flex flex-col gap-3">
-      <div class="flex items-center justify-between px-1">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">📅 Control de la Semana en Curso</h2>
-        <button type="button" id="btn-archivar-semana" class="text-[11px] font-bold text-pink-400 bg-pink-950/30 border border-pink-900/50 px-3 py-1.5 rounded-xl">🗄️ Archivar Turnos Semanales</button>
-      </div>
-
-      <div id="tabs-trabajadores" class="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none"></div>
-      <div id="historial-lista" class="flex flex-col gap-2.5"></div>
-
-      <div class="mt-4 border-t border-zinc-800/80 pt-4">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500 px-1 mb-2">📁 Archivo Histórico de Semanas Pasadas</h3>
-        <div id="lista-semanas-archivadas" class="flex flex-col gap-2"></div>
-        
-        <div id="desglose-semana-contenedor" class="hidden mt-3 bg-zinc-900 p-4 rounded-2xl border border-zinc-800 flex flex-col gap-3">
-          <div class="flex items-center justify-between">
-            <h4 id="desglose-titulo" class="text-xs font-black text-pink-400 uppercase">Detalles Archivados</h4>
-            <button onclick="cerrarDesglose()" class="text-zinc-500 font-bold hover:text-white text-xs">✕ Cerrar</button>
-          </div>
-          <div id="desglose-tabla-lista" class="flex flex-col gap-2 max-h-64 overflow-y-auto"></div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <canvas id="watermark-canvas" class="hidden"></canvas>
-
-  <script>
-    const CLAVE_ADMIN = "1234";
-    let esAdmin = false;
-    let usuarioSeleccionadoTab = "";
-    let subTabActiva = "turnos"; // "turnos" o "nomina"
-
-    // Elementos DOM
-    const fechaInput = document.getElementById('fecha-input');
-    const nombreSelect = document.getElementById('nombre-select');
-    const pinTrabajadorInput = document.getElementById('pin-trabajador-input');
-    const wrapperPinTrabajador = document.getElementById('wrapper-pin-trabajador');
-    const btnAccionFichaje = document.getElementById('btn-accion-fichaje');
-    const btnEnviarReportePdf = document.getElementById('btn-enviar-reporte-pdf');
-    const badgeEstadoTurno = document.getElementById('badge-estado-turno');
-    const btnArchivarSemana = document.getElementById('btn-archivar-semana');
-    const historialLista = document.getElementById('historial-lista');
-    const tabsTrabajadores = document.getElementById('tabs-trabajadores');
-    const listaSemanasArchivadas = document.getElementById('lista-semanas-archivadas');
-    const desgloseSemanaContenedor = document.getElementById('desglose-semana-contenedor');
-    const desgloseTitulo = document.getElementById('desglose-titulo');
-    const desgloseTablaLista = document.getElementById('desglose-tabla-lista');
-    
-    const totalHorasTxt = document.getElementById('total-horas-txt');
-    const totalDineroTxt = document.getElementById('total-dinero-txt');
-
-    const btnToggleAdmin = document.getElementById('btn-toggle-admin');
-    const adminDot = document.getElementById('admin-dot');
-    const adminTxt = document.getElementById('admin-txt');
-    
-    const panelAdminTotales = document.getElementById('panel-admin-totales');
-    const panelHistorialAdmin = document.getElementById('panel-historial-admin');
-    const opcionesTiempoAdmin = document.getElementById('opciones-tiempo-admin');
-    const vistaAdminTurnos = document.getElementById('vista-admin-turnos');
-    const vistaAdminNomina = document.getElementById('vista-admin-nomina');
-    const listaTotalesNominaEmpleados = document.getElementById('lista-totales-nomina-empleados');
-    
-    const tabSubTurnos = document.getElementById('tab-sub-turnos');
-    const tabSubNomina = document.getElementById('tab-sub-nomina');
-
-    const nuevoUsuarioInput = document.getElementById('nuevo-usuario-input');
-    const nuevoPinInput = document.getElementById('nuevo-pin-input');
-    const nuevoSueldoInput = document.getElementById('nuevo-sueldo-input');
-    const btnAddUser = document.getElementById('btn-add-user');
-    const listaUsuariosAdmin = document.getElementById('lista-usuarios-admin');
-
-    const fotoInput = document.getElementById('foto-input');
-    const previewContainer = document.getElementById('preview-container');
-    const fotoPreview = document.getElementById('foto-preview');
-    const watermarkCanvas = document.getElementById('watermark-canvas');
-
-    let fotoProcesadaDataUrl = "";
-
-    const syncFechaHoy = () => { fechaInput.value = new Date().toISOString().slice(0, 10); };
-    syncFechaHoy();
-
-    // Carga de bases de datos locales
-    let historial = JSON.parse(localStorage.getItem('kb_v5_data') || '[]');
-    let usuariosSistema = JSON.parse(localStorage.getItem('kb_v5_users') || '[{"nombre":"Alejandra Pérez","pin":"1111","sueldo":25.00},{"nombre":"Sofía Rodríguez","pin":"2222","sueldo":30.00}]');
-    let semanasArchivadas = JSON.parse(localStorage.getItem('kb_v5_archivados') || '[]');
-
-    const getHM = () => {
-      const d = new Date();
-      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-    };
-
-    const getNumeroSemanaAño = (fechaObj) => {
-      const d = new Date(Date.UTC(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate()));
-      const dayNum = d.getUTCDay() || 7;
-      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-    };
-
-    // --- SUB-PESTAÑAS ADMINISTRATIVAS ---
-    tabSubTurnos.onclick = () => {
-      subTabActiva = "turnos";
-      tabSubTurnos.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-pink-600 text-white transition-all";
-      tabSubNomina.className = "flex-1 py-2 text-xs font-bold rounded-lg text-zinc-400 hover:text-white transition-all";
-      vistaAdminTurnos.classList.remove('hidden');
-      vistaAdminNomina.classList.add('hidden');
-      renderApp();
-    };
-
-    tabSubNomina.onclick = () => {
-      subTabActiva = "nomina";
-      tabSubNomina.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-pink-600 text-white transition-all";
-      tabSubTurnos.className = "flex-1 py-2 text-xs font-bold rounded-lg text-zinc-400 hover:text-white transition-all";
-      vistaAdminTurnos.classList.add('hidden');
-      vistaAdminNomina.classList.remove('hidden');
-      renderApp();
-    };
-
-    // --- CONTROL DE PERSONAL POR EL ADMIN ---
-    const renderListaUsuariosAdmin = () => {
-      listaUsuariosAdmin.innerHTML = usuariosSistema.map((u, i) => `
-        <div class="bg-zinc-900 p-2 rounded-xl border border-zinc-800 flex items-center justify-between text-xs">
-          <div class="flex flex-col">
-            <span class="font-bold text-white">${u.nombre}</span>
-            <span class="text-[10px] text-zinc-500 font-mono">PIN: ${u.pin} | $<strong class="text-emerald-400">${parseFloat(u.sueldo).toFixed(2)}/h</strong></span>
-          </div>
-          <div class="flex gap-1">
-            <button onclick="editarUsuario(${i})" class="bg-zinc-800 text-pink-400 px-2 py-1 rounded font-bold">✏️</button>
-            <button onclick="eliminarUsuario(${i})" class="bg-zinc-800 text-rose-400 px-2 py-1 rounded font-bold">🗑️</button>
-          </div>
-        </div>
-      `).join('');
-      
-      nombreSelect.innerHTML = usuariosSistema.map(u => `<option value="${u.nombre}">${u.nombre}</option>`).join('');
-      evaluarEstadoEmpleado();
-    };
-
-    btnAddUser.onclick = () => {
-      const nombre = nuevoUsuarioInput.value.trim();
-      const pin = nuevoPinInput.value.trim();
-      const sueldo = parseFloat(nuevoSueldoInput.value) || 0;
-      if(!nombre || pin.length < 4 || sueldo <= 0) {
-        alert("Llena todos los campos correctamente."); return;
-      }
-      usuariosSistema.push({ nombre, pin, sueldo });
-      localStorage.setItem('kb_v5_users', JSON.stringify(usuariosSistema));
-      nuevoUsuarioInput.value = ""; nuevoPinInput.value = ""; nuevoSueldoInput.value = "";
-      renderListaUsuariosAdmin(); renderApp();
-    };
-
-    window.eliminarUsuario = (index) => {
-      if(confirm(`¿Remover a ${usuariosSistema[index].nombre}?`)) {
-        usuariosSistema.splice(index, 1);
-        localStorage.setItem('kb_v5_users', JSON.stringify(usuariosSistema));
-        renderListaUsuariosAdmin(); renderApp();
-      }
-    };
-
-    window.editarUsuario = (index) => {
-      const user = usuariosSistema[index];
-      const nNombre = prompt("Modificar nombre completo:", user.nombre);
-      const nPin = prompt("Modificar PIN:", user.pin);
-      const nSueldo = prompt("Modificar Sueldo por Hora:", user.sueldo);
-      if(nNombre && nPin && nSueldo) {
-        usuariosSistema[index] = { nombre: nNombre.trim(), pin: nPin.trim(), sueldo: parseFloat(nSueldo) || 0 };
-        localStorage.setItem('kb_v5_users', JSON.stringify(usuariosSistema));
-        renderListaUsuariosAdmin(); renderApp();
-      }
-    };
-
-    const evaluarEstadoEmpleado = () => {
-      const empleado = nombreSelect.value;
-      const turnoAbierto = historial.find(item => item.nombre === empleado && !item.salida);
-      if (turnoAbierto) {
-        badgeEstadoTurno.innerText = "Turno Abierto";
-        badgeEstadoTurno.className = "text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold";
-        btnAccionFichaje.innerText = "📸 Registrar Salida";
-      } else {
-        badgeEstadoTurno.innerText = "Fuera de Turno";
-        badgeEstadoTurno.className = "text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-bold";
-        btnAccionFichaje.innerText = "📸 Registrar Entrada";
-      }
-    };
-
-    nombreSelect.onchange = evaluarEstadoEmpleado;
-
-    // --- ACCIÓN DE FICHAJE ---
-    btnAccionFichaje.onclick = () => {
-      const emp = nombreSelect.value;
-      const dataUser = usuariosSistema.find(u => u.nombre === emp);
-      if(!dataUser) return;
-
-      // Si no es admin, validar PIN. Si es admin, puede fichar sin restricción.
-      if(!esAdmin && pinTrabajadorInput.value !== dataUser.pin) {
-        alert("🔒 PIN incorrecto."); return;
-      }
-      fotoInput.click();
-    };
-
-    fotoInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const empleado = nombreSelect.value;
-      const user = usuariosSistema.find(u => u.nombre === empleado);
-      const turnoAbierto = historial.find(item => item.nombre === empleado && !item.salida);
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() {
-          const ctx = watermarkCanvas.getContext('2d');
-          watermarkCanvas.width = 400; watermarkCanvas.height = 300;
-          ctx.drawImage(img, 0, 0, 400, 300);
-
-          const horaFichada = getHM();
-          const fechaFichada = fechaInput.value;
-
-          ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-          ctx.fillRect(0, 275, 400, 25);
-          ctx.fillStyle = "#ec4899";
-          ctx.font = "bold 10px monospace";
-          ctx.fillText(`KIBOU FASHION - ${horaFichada} | ${empleado}`, 10, 291);
-
-          const fotoURL = watermarkCanvas.toDataURL('image/jpeg', 0.7);
-
-          if (!turnoAbierto) {
-            historial.unshift({
-              id: Date.now(),
-              nombre: empleado,
-              fecha: fechaFichada,
-              entrada: horaFichada,
-              salida: "",
-              tarifaHistorica: user ? user.sueldo : 22.01,
-              fotoEntrada: fotoURL,
-              fotoSalida: "",
-              pagado: false
-            });
-            alert(`✅ Entrada grabada (${horaFichada}).`);
-          } else {
-            turnoAbierto.salida = horaFichada;
-            turnoAbierto.fotoSalida = fotoURL;
-            alert(`🛑 Salida grabada (${horaFichada}).`);
-          }
-
-          pinTrabajadorInput.value = "";
-          evaluarEstadoEmpleado();
-          renderApp();
+        let BD = {
+            empleados: JSON.parse(localStorage.getItem('asist_empleados')) || [],
+            registros: JSON.parse(localStorage.getItem('asist_registros')) || [],
+            pagos: JSON.parse(localStorage.getItem('asist_pagos')) || {} // { 'año-Wsemana-empId': true }
         };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    };
 
-    // --- ACCESO Y SEGURIDAD ROL ADMIN ---
-    btnToggleAdmin.onclick = () => {
-      if (!esAdmin) {
-        const pass = prompt("Clave Maestra:");
-        if (pass === CLAVE_ADMIN) { esAdmin = true; actualizarModo(); } else { alert("Error."); }
-      } else { esAdmin = false; actualizarModo(); }
-    };
+        function guardarBD() {
+            localStorage.setItem('asist_empleados', JSON.stringify(BD.empleados));
+            localStorage.setItem('asist_registros', JSON.stringify(BD.registros));
+            localStorage.setItem('asist_pagos', JSON.stringify(BD.pagos));
+        }
 
-    const actualizarModo = () => {
-      if (esAdmin) {
-        adminDot.className = "w-2 h-2 rounded-full bg-pink-500 animate-pulse";
-        adminTxt.innerText = "Administrador"; adminTxt.className = "text-pink-400";
-        panelAdminTotales.classList.remove('hidden');
-        panelHistorialAdmin.classList.remove('hidden');
-        opcionesTiempoAdmin.classList.remove('hidden');
-        wrapperPinTrabajador.classList.add('hidden'); // Admin no necesita poner PIN para simular turnos o ver horas
-      } else {
-        adminDot.className = "w-2 h-2 rounded-full bg-zinc-600";
-        adminTxt.innerText = "Trabajador"; adminTxt.className = "text-zinc-400";
-        panelAdminTotales.classList.add('hidden');
-        panelHistorialAdmin.classList.add('hidden');
-        opcionesTiempoAdmin.classList.add('hidden');
-        wrapperPinTrabajador.classList.remove('hidden');
-        syncFechaHoy();
-      }
-      renderApp();
-    };
-
-    // --- RENDER COMPLETO DE HISTORIALES Y NÓMINAS ---
-    const renderApp = () => {
-      localStorage.setItem('kb_v5_data', JSON.stringify(historial));
-      localStorage.setItem('kb_v5_archivados', JSON.stringify(semanasArchivadas));
-
-      if (!esAdmin) return;
-
-      // 1. Pestaña de Nómina General: Agrupar totales por empleado (Punto 5)
-      let resumenNominaHtml = "";
-      usuariosSistema.forEach(u => {
-        let totalHorasEmp = 0, totalDineroEmp = 0;
-        historial.filter(h => h.nombre === u.nombre && h.salida).forEach(item => {
-          const [eH, eM] = item.entrada.split(':').map(Number);
-          const [sH, sM] = item.salida.split(':').map(Number);
-          let diffMin = (sH * 60 + sM) - (eH * 60 + eM);
-          if (diffMin < 0) diffMin += 24 * 60; // Tratar cruce de medianoche
-          const horasNetas = diffMin / 60;
-          totalHorasEmp += horasNetas;
-          totalDineroEmp += horasNetas * item.tarifaHistorica;
-        });
-
-        resumenNominaHtml += `
-          <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 flex items-center justify-between text-xs">
-            <div>
-              <span class="font-extrabold text-white text-sm block">${u.nombre}</span>
-              <span class="text-zinc-500 font-bold block mt-0.5">Jornada semanal acumulada: ${totalHorasEmp.toFixed(2)}h</span>
-            </div>
-            <div class="text-right">
-              <span class="text-base font-black text-emerald-400 block">$${totalDineroEmp.toFixed(2)}</span>
-              <span class="text-[10px] text-zinc-500 font-mono block">Tarifa: $${u.sueldo}/h</span>
-            </div>
-          </div>
-        `;
-      });
-      listaTotalesNominaEmpleados.innerHTML = resumenNominaHtml || `<p class="text-xs text-zinc-500 text-center">No hay personal registrado.</p>`;
-
-      // 2. Render de Semanas Archivadas (Punto 3)
-      listaSemanasArchivadas.innerHTML = semanasArchivadas.map((sem, idx) => `
-        <div class="bg-zinc-900/40 border border-zinc-800 rounded-xl p-3 flex flex-col gap-1 text-xs">
-          <div class="flex items-center justify-between font-bold text-zinc-300">
-            <span class="text-pink-400">📅 Semana #${sem.numSemana} (Año)</span>
-            <button onclick="verDesgloseSemana(${idx})" class="text-[11px] bg-zinc-800 hover:bg-pink-600 text-white px-2.5 py-1 rounded-lg transition-all font-bold">🔍 Ver Desglose</button>
-          </div>
-          <p class="text-[11px] text-zinc-500 mt-0.5">Cerrada el ${sem.fechaCierre} con ${sem.datosTurnos.length} registros totales.</p>
-        </div>
-      `).join('');
-
-      // 3. Pestañas de Turnos Activos
-      const listadoNombresConDatos = [...new Set(historial.map(item => item.nombre))];
-      if (listadoNombresConDatos.length > 0 && !usuarioSeleccionadoTab) {
-        usuarioSeleccionadoTab = listadoNombresConDatos[0];
-      }
-
-      // El admin puede hacer clic en las pestañas y ver horas libremente (Punto 4)
-      tabsTrabajadores.innerHTML = listadoNombresConDatos.map(t => {
-        const activeClass = usuarioSeleccionadoTab === t ? 'bg-pink-600 text-white border-pink-500' : 'bg-zinc-900 text-zinc-400 border-zinc-800';
-        return `<button onclick="cambiarTab('${t}')" class="px-3 py-1.5 text-xs font-extrabold rounded-xl border ${activeClass} whitespace-nowrap">${t}</button>`;
-      }).join('');
-
-      const filtrados = historial.filter(item => item.nombre === usuarioSeleccionadoTab);
-      historialLista.innerHTML = '';
-      let totalHorasFiltro = 0, totalDineroFiltro = 0;
-
-      if (filtrados.length === 0) {
-        historialLista.innerHTML = `<div class="bg-zinc-900/30 border border-dashed border-zinc-800/60 rounded-2xl p-6 text-center text-xs text-zinc-600 font-medium">Sin registros guardados.</div>`;
-      } else {
-        filtrados.forEach((item) => {
-          let horasNetas = 0;
-          let pagoDia = 0;
-
-          if (item.entrada && item.salida) {
-            const [eH, eM] = item.entrada.split(':').map(Number);
-            const [sH, sM] = item.salida.split(':').map(Number);
+        // --- MANEJO DE TIEMPO INTERNO (ZONA HORARIA SINALOA) ---
+        function obtenerFechaSinaloa() {
+            const ahora = new Date();
+            // Formateador para extraer componentes exactos de Sinaloa
+            const dtf = new Intl.DateTimeFormat('en-US', {
+                timeZone: TZ_SINALOA,
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            });
             
-            // CORRECCIÓN PUNTO 1: Si horas son iguales es 0 exacto.
-            let diffMin = (sH * 60 + sM) - (eH * 60 + eM);
-            if (diffMin < 0) diffMin += 24 * 60;
+            const [{ value: m },,{ value: d },,{ value: y },,{ value: hr },,{ value: min },,{ value: seg }] = dtf.formatToParts(ahora);
+            return new Date(`${y}-${m}-${d}T${hr}:${min}:${seg}`);
+        }
+
+        function formatearFecha(dateObj) {
+            return dateObj.toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        }
+
+        function formatearHora(dateObj) {
+            return dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // Obtiene el identificador ISO de la semana (Lunes a Domingo) para un objeto Date dado
+        function obtenerSemanaISO(fecha) {
+            const d = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+            const diaNum = d.getUTCDay() || 7;
+            d.setUTCDate(d.getUTCDate() + 4 - diaNum);
+            const añoInicio = d.getUTCFullYear();
+            const primerJueves = new Date(Date.UTC(añoInicio, 0, 4));
+            const semana = Math.ceil((((d - primerJueves) / 86400000) + 1) / 7) + 1;
+            return `${añoInicio}-W${String(semana).padStart(2, '0')}`;
+        }
+
+        // --- CÁMARA NATIVA ---
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+
+        async function iniciarCamara() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user", width: 400, height: 300 }, 
+                    audio: false 
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Error al acceder a la cámara: ", err);
+            }
+        }
+
+        function capturarFoto() {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth || 320;
+            canvas.height = video.videoHeight || 240;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/jpeg', 0.7);
+        }
+
+        // --- SISTEMA DE NAVEGACIÓN ---
+        let isAdminAutenticado = false;
+
+        function cambiarVista(vistaId) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            document.getElementById(`view-${vistaId}`).classList.add('active');
             
-            horasNetas = diffMin / 60;
-            totalHorasFiltro += horasNetas;
-            pagoDia = horasNetas * (item.tarifaHistorica || 22.01);
-            totalDineroFiltro += pagoDia;
-          }
+            const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(vistaId));
+            if(btnActivo) btnActivo.classList.add('active');
 
-          const [y, m, d] = item.fecha.split('-');
-          const fechaFormato = new Date(y, m - 1, d).toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+            if (vistaId === 'checador') iniciarCamara();
+            if (vistaId === 'turnos') renderTurnosActivos();
+            if (vistaId === 'nomina') { generarSemanasSelect(); renderNomina(); }
+            if (vistaId === 'empleados') evaluarPanelAdmin();
+            if (vistaId === 'historial') { cargarFiltrosHistorial(); renderHistorial(); }
+        }
 
-          historialLista.innerHTML += `
-            <div class="bg-zinc-900/50 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 relative shadow-sm">
-              <div class="absolute left-0 top-0 bottom-0 w-1 ${item.salida ? 'bg-pink-500' : 'bg-amber-500'}"></div>
-              <div class="flex items-start justify-between pl-2">
-                <div>
-                  <span class="text-xs font-black text-white capitalize">${fechaFormato}</span>
-                  <label class="inline-flex items-center gap-1.5 ml-3 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800 cursor-pointer">
-                    <input type="checkbox" ${item.pagado ? 'checked' : ''} onclick="togglePagoDia(${item.id})" class="accent-pink-500 w-3 h-3">
-                    <span class="text-[9px] font-black ${item.pagado ? 'text-emerald-400' : 'text-zinc-500'}">${item.pagado ? 'PAGADO ✅' : 'PENDIENTE'}</span>
-                  </label>
-                  <div class="flex gap-3 text-[10px] text-zinc-400 mt-1 font-bold">
-                    <span>In: <strong class="text-pink-400">${item.entrada}</strong></span>
-                    <span>Out: <strong class="text-purple-400">${item.salida || 'Abierto'}</strong></span>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <span class="text-sm font-black text-emerald-400 block">$${pagoDia.toFixed(2)}</span>
-                  <span class="text-[10px] text-zinc-500 font-bold block">${horasNetas.toFixed(2)} hrs</span>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-2 pl-2">
-                <img src="${item.fotoEntrada}" class="w-full h-20 object-cover rounded-lg border border-zinc-800">
-                ${item.fotoSalida ? `<img src="${item.fotoSalida}" class="w-full h-20 object-cover rounded-lg border border-zinc-800">` : `<div class="w-full h-20 bg-zinc-950 border border-dashed border-zinc-800 rounded-lg flex items-center justify-center text-[9px] text-zinc-600 font-bold">Pendiente</div>`}
-              </div>
-              <div class="flex justify-end gap-2 text-[10px]">
-                <button onclick="modificarRegistroManualAdmin(${item.id})" class="bg-zinc-800 text-zinc-300 font-bold px-2.5 py-1 rounded hover:bg-zinc-700">✏️ Editar Turno</button>
-                <button onclick="removerRegistro(${item.id})" class="bg-zinc-800/40 text-rose-500 font-bold px-2 py-1 rounded">Eliminar</button>
-              </div>
-            </div>
-          `;
+        function evaluarPanelAdmin() {
+            if (isAdminAutenticado) {
+                document.getElementById('admin-login-card').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                renderListaEmpleados();
+            } else {
+                document.getElementById('admin-login-card').style.display = 'block';
+                document.getElementById('admin-content').style.display = 'none';
+            }
+        }
+
+        function verificarAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === CLAVE_ADMIN) {
+                isAdminAutenticado = true;
+                evaluarPanelAdmin();
+            } else {
+                alert("Contraseña de administrador incorrecta.");
+            }
+        }
+
+        // --- LÓGICA DEL CHECADOR (REGISTROS DE ASISTENCIA) ---
+        function cargarEmpleadosEnSelects() {
+            const selectCheck = document.getElementById('check-emp-select');
+            selectCheck.innerHTML = '<option value="">-- Selecciona tu Nombre --</option>';
+            BD.empleados.forEach(e => {
+                selectCheck.innerHTML += `<option value="${e.id}">${e.nombre}</option>`;
+            });
+        }
+
+        function procesarFichaje(tipo) {
+            const empId = document.getElementById('check-emp-select').value;
+            const pin = document.getElementById('check-pin').value;
+
+            if (!empId) return alert("Selecciona un empleado de la lista.");
+            if (!pin) return alert("Escribe tu PIN de seguridad.");
+
+            const empleado = BD.empleados.find(e => e.id === empId);
+            if (empleado.pin !== pin) return alert("PIN incorrecto.");
+
+            const registroAbierto = BD.registros.find(r => r.empleadoId === empId && r.salida === null);
+
+            if (tipo === 'entrada' && registroAbierto) {
+                return alert(`Ya cuentas con una entrada registrada abierta el ${registroAbierto.fecha} a las ${registroAbierto.horaEntrada}. Debes registrar salida primero.`);
+            }
+            if (tipo === 'salida' && !registroAbierto) {
+                return alert("No tienes ningún turno abierto. Registra una entrada primero.");
+            }
+
+            const timestampSinaloa = obtenerFechaSinaloa();
+            const fotoBase64 = capturarFoto();
+
+            if (tipo === 'entrada') {
+                const nuevoRegistro = {
+                    id: 'reg_' + Date.now(),
+                    empleadoId: empId,
+                    empleadoNombre: empleado.nombre,
+                    sueldoPorHora: empleado.sueldo,
+                    fecha: formatearFecha(timestampSinaloa),
+                    semanaISO: obtenerSemanaISO(timestampSinaloa),
+                    horaEntrada: formatearHora(timestampSinaloa),
+                    timestampEntrada: timestampSinaloa.toISOString(),
+                    fotoEntrada: fotoBase64,
+                    horaSalida: null,
+                    timestampSalida: null,
+                    fotoSalida: null
+                };
+                BD.registros.unshift(nuevoRegistro);
+                alert(`Entrada registrada exitosamente para ${empleado.nombre}`);
+            } else {
+                registroAbierto.horaSalida = formatearHora(timestampSinaloa);
+                registroAbierto.timestampSalida = timestampSinaloa.toISOString();
+                registroAbierto.fotoSalida = fotoBase64;
+                alert(`Salida registrada exitosamente para ${empleado.nombre}. ¡Buen descanso!`);
+            }
+
+            guardarBD();
+            document.getElementById('check-pin').value = ''; // Limpiar PIN por seguridad
+            cargarEmpleadosEnSelects();
+        }
+
+        // --- VISTA: TURNOS ACTIVOS ---
+        function renderTurnosActivos() {
+            const contenedor = document.getElementById('lista-turnos-activos');
+            contenedor.innerHTML = '';
+            const activos = BD.registros.filter(r => r.salida === null);
+
+            if(activos.length === 0) {
+                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No hay personal laborando en este momento.</p>';
+                return;
+            }
+
+            activos.forEach(r => {
+                contenedor.innerHTML += `
+                    <div class="record-item">
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            <img src="${r.fotoEntrada}" class="photo-preview">
+                            <div>
+                                <strong>${r.empleadoNombre}</strong><br>
+                                <small style="color: var(--text-light)">Inició Entrada: ${r.fecha} | ${r.horaEntrada}</small>
+                            </div>
+                        </div>
+                        <span class="badge badge-success">Activo</span>
+                    </div>
+                `;
+            });
+        }
+
+        // --- GESTIÓN DE EMPLEADOS (CRUD) ---
+        function guardarEmpleado() {
+            const id = document.getElementById('emp-id').value;
+            const nombre = document.getElementById('emp-nombre').value.trim();
+            const pin = document.getElementById('emp-pin').value.trim();
+            const sueldo = parseFloat(document.getElementById('emp-sueldo').value);
+
+            if(!nombre || !pin || isNaN(sueldo)) return alert("Completa todos los campos correctamente.");
+            if(pin.length !== 4 || isNaN(pin)) return alert("El PIN debe ser estrictamente de 4 números.");
+
+            if(id) {
+                // Modificar existente
+                const index = BD.empleados.findIndex(e => e.id === id);
+                if(index !== -1) {
+                    BD.empleados[index] = { id, nombre, pin, sueldo };
+                }
+            } else {
+                // Insertar Nuevo
+                BD.empleados.push({
+                    id: 'emp_' + Date.now(),
+                    nombre, pin, sueldo
+                });
+            }
+
+            guardarBD();
+            limpiarFormEmpleado();
+            renderListaEmpleados();
+            cargarEmpleadosEnSelects();
+        }
+
+        function editarEmpleado(id) {
+            const emp = BD.empleados.find(e => e.id === id);
+            if(!emp) return;
+            document.getElementById('form-emp-title').innerText = "📝 Editar Datos de Empleado";
+            document.getElementById('emp-id').value = emp.id;
+            document.getElementById('emp-nombre').value = emp.nombre;
+            document.getElementById('emp-pin').value = emp.pin;
+            document.getElementById('emp-sueldo').value = emp.sueldo;
+        }
+
+        function eliminarEmpleado(id) {
+            if(confirm("¿Estás seguro de dar de baja a este empleado? El historial de registros se mantendrá.")) {
+                BD.empleados = BD.empleados.filter(e => e.id !== id);
+                guardarBD();
+                renderListaEmpleados();
+                cargarEmpleadosEnSelects();
+            }
+        }
+
+        function limpiarFormEmpleado() {
+            document.getElementById('form-emp-title').innerText = "👤 Crear / Editar Empleado";
+            document.getElementById('emp-id').value = '';
+            document.getElementById('emp-nombre').value = '';
+            document.getElementById('emp-pin').value = '';
+            document.getElementById('emp-sueldo').value = '';
+        }
+
+        function renderListaEmpleados() {
+            const contenedor = document.getElementById('lista-empleados');
+            contenedor.innerHTML = '';
+            if(BD.empleados.length === 0) {
+                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No hay empleados registrados en el catálogo.</p>';
+                return;
+            }
+            BD.empleados.forEach(e => {
+                contenedor.innerHTML += `
+                    <div class="employee-card">
+                        <div>
+                            <strong>${e.nombre}</strong><br>
+                            <small style="color: var(--text-light)">Sueldo: $${e.sueldo}/hr | PIN: <span class="pin-display">${e.pin}</span></small>
+                        </div>
+                        <div style="display: flex; gap: 0.25rem;">
+                            <button class="btn-primary" style="padding: 0.4rem; font-size: 0.8rem;" onclick="editarEmpleado('${e.id}')">Editar</button>
+                            <button class="btn-danger" style="padding: 0.4rem; font-size: 0.8rem;" onclick="eliminarEmpleado('${e.id}')">Baja</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- CÓMPUTO DE NÓMINA ---
+        function generarSemanasSelect() {
+            const select = document.getElementById('nomina-semana-select');
+            const semanasUnicas = new Set();
+            
+            // Añadir semana actual por defecto
+            semanasUnicas.add(obtenerSemanaISO(obtenerFechaSinaloa()));
+            
+            // Extraer semanas de los registros guardados
+            BD.registros.forEach(r => { if(r.semanaISO) semanasUnicas.add(r.semanaISO); });
+
+            const seleccionadaAnteriormente = select.value;
+            select.innerHTML = '';
+            
+            Array.from(semanasUnicas).sort().reverse().forEach(sem => {
+                select.innerHTML += `<option value="${sem}">Semana ${sem}</option>`;
+            });
+
+            if(seleccionadaAnteriormente) select.value = seleccionadaAnteriormente;
+        }
+
+        function calcularHorasYPago(reg) {
+            if (!reg.timestampEntrada || !reg.timestampSalida) return { horas: 0, pago: 0 };
+            const t1 = new Date(reg.timestampEntrada);
+            const t2 = new Date(reg.timestampSalida);
+            const difMiliseconds = t2 - t1;
+            const horas = Math.max(0, difMiliseconds / (1000 * 60 * 60)); // Convertir a horas
+            const pago = horas * (reg.sueldoPorHora || 0);
+            return { horas, pago };
+        }
+
+        function renderNomina() {
+            const semana = document.getElementById('nomina-semana-select').value;
+            const contenedor = document.getElementById('lista-nomina');
+            contenedor.innerHTML = '';
+
+            if(!semana) return;
+
+            // Agrupar registros calculados por empleado para la semana seleccionada
+            const resumenEmpleados = {};
+
+            // Inicializar con todos los empleados vigentes
+            BD.empleados.forEach(e => {
+                resumenEmpleados[e.id] = { nombre: e.nombre, horasTotales: 0, pagoTotal: 0, registrosValidos: 0 };
+            });
+
+            // Filtrar y sumar las horas trabajadas
+            BD.registros.forEach(r => {
+                if(r.semanaISO === Array.from(semana).join('') && r.timestampSalida) {
+                    if(!resumenEmpleados[r.empleadoId]) {
+                        resumenEmpleados[r.empleadoId] = { nombre: r.empleadoNombre, horasTotales: 0, pagoTotal: 0, registrosValidos: 0 };
+                    }
+                    const calculo = calcularHorasYPago(r);
+                    resumenEmpleados[r.empleadoId].horasTotales += calculo.horas;
+                    resumenEmpleados[r.empleadoId].pagoTotal += calculo.pago;
+                    resumenEmpleados[r.empleadoId].registrosValidos++;
+                }
+            });
+
+            Object.keys(resumenEmpleados).forEach(empId => {
+                const item = resumenEmpleados[empId];
+                const llavePago = `${semana}-${empId}`;
+                const esPagado = BD.pagos[llavePago] || false;
+
+                contenedor.innerHTML += `
+                    <div class="card" style="border-left: 5px solid ${esPagado ? 'var(--success)' : 'var(--warning)'}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <strong>${item.nombre}</strong><br>
+                                <small style="color: var(--text-light)">Turnos cubiertos: ${item.registrosValidos}</small><br>
+                                <small style="color: var(--text-light)">Horas acumuladas: ${item.horasTotales.toFixed(2)} hrs</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 1.2rem; font-weight: bold; color: var(--text)">$${item.pagoTotal.toFixed(2)}</span><br>
+                                <span class="badge ${esPagado ? 'badge-success' : 'badge-warning'}">${esPagado ? 'Pagado' : 'Pendiente'}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.75rem;">
+                            <button class="${esPagado ? 'btn-secondary' : 'btn-success'}" style="padding: 0.4rem; font-size: 0.85rem;" onclick="conmutarEstadoPago('${llavePago}')">
+                                ${esPagado ? '🔴 Marcar como No Pagado' : '🟢 Marcar como Pagado'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function conmutarEstadoPago(llavePago) {
+            if(BD.pagos[llavePago]) {
+                delete BD.pagos[llavePago];
+            } else {
+                BD.pagos[llavePago] = true;
+            }
+            guardarBD();
+            renderNomina();
+        }
+
+        // --- HISTORIAL GENERAL Y EDICIÓN MANUAL ---
+        function cargarFiltrosHistorial() {
+            const select = document.getElementById('filtro-historial-emp');
+            select.innerHTML = '<option value="">Todos los empleados</option>';
+            BD.empleados.forEach(e => {
+                select.innerHTML += `<option value="${e.id}">${e.nombre}</option>`;
+            });
+        }
+
+        function renderHistorial() {
+            const empFiltro = document.getElementById('filtro-historial-emp').value;
+            const contenedor = document.getElementById('lista-historial');
+            contenedor.innerHTML = '';
+
+            let filtrados = BD.registros;
+            if(empFiltro) {
+                filtrados = filtrados.filter(r => r.empleadoId === empFiltro);
+            }
+
+            if(filtrados.length === 0) {
+                contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No se encontraron registros de asistencia.</p>';
+                return;
+            }
+
+            filtrados.forEach(r => {
+                const calculo = calcularHorasYPago(r);
+                contenedor.innerHTML += `
+                    <div class="card" style="font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>${r.empleadoNombre}</strong>
+                            <small class="badge badge-success">${r.fecha}</small>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;">
+                            <div>
+                                <p style="font-size:0.75rem; color:var(--text-light)">Foto Entrada</p>
+                                <img src="${r.fotoEntrada || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2230%22 height=%2230%22><rect fill=%22%23ccc%22 width=%22100%%22 height=%22100%%22/></svg>'}" class="photo-preview">
+                            </div>
+                            <div>
+                                <p style="font-size:0.75rem; color:var(--text-light)">Foto Salida</p>
+                                <img src="${r.fotoSalida || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2230%22 height=%2230%22><rect fill=%22%23ccc%22 width=%22100%%22 height=%22100%%22/></svg>'}" class="photo-preview">
+                            </div>
+                            <div style="flex-grow:1; text-align: right;">
+                                <p>🛫 <b>Entrada:</b> ${r.horaEntrada}</p>
+                                <p>🛬 <b>Salida:</b> ${r.horaSalida || '<span style="color:orange; font-weight:bold;">Abierto</span>'}</p>
+                                <p>🧮 <b>Total:</b> ${calculo.horas.toFixed(2)} hrs ($${calculo.pago.toFixed(2)})</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.25rem; margin-top: 0.5rem;">
+                            <button class="btn-primary" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="editarRegistroManual('${r.id}')">Ajustar Tiempos</button>
+                            <button class="btn-danger" style="padding: 0.3rem 0.5rem; font-size: 0.75rem; width: auto;" onclick="eliminarRegistro('${r.id}')">❌</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function editarRegistroManual(id) {
+            const reg = BD.registros.find(r => r.id === id);
+            if(!reg) return;
+
+            const nuevaHoraEntrada = prompt("Modificar hora de Entrada (Formato HH:MM:SS)", reg.horaEntrada);
+            if(nuevaHoraEntrada === null) return; // Cancelado
+
+            let nuevaHoraSalida = reg.horaSalida;
+            if(reg.horaSalida !== null) {
+                nuevaHoraSalida = prompt("Modificar hora de Salida (Formato HH:MM:SS)", reg.horaSalida);
+            }
+
+            // Separar fecha existente para reconstruir el timestamp estructurado
+            const [dia, mes, año] = reg.fecha.split('/');
+            
+            if (nuevaHoraEntrada) {
+                reg.horaEntrada = nuevaHoraEntrada;
+                reg.timestampEntrada = new Date(`${año}-${mes}-${dia}T${nuevaHoraEntrada}`).toISOString();
+            }
+
+            if (nuevaHoraSalida) {
+                reg.horaSalida = nuevaHoraSalida;
+                reg.timestampSalida = new Date(`${año}-${mes}-${dia}T${nuevaHoraSalida}`).toISOString();
+            }
+
+            guardarBD();
+            renderHistorial();
+        }
+
+        function eliminarRegistro(id) {
+            if(confirm("¿Eliminar por completo este registro del historial financiero?")) {
+                BD.registros = BD.registros.filter(r => r.id !== id);
+                guardarBD();
+                renderHistorial();
+            }
+        }
+
+        // --- INICIALIZACIÓN INMEDIATA ---
+        window.addEventListener('load', () => {
+            cargarEmpleadosEnSelects();
+            iniciarCamara();
         });
-      }
-
-      totalHorasTxt.innerText = `${totalHorasFiltro.toFixed(2)}h`;
-      totalDineroTxt.innerText = `$${totalDineroFiltro.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
-    };
-
-    window.cambiarTab = (n) => { usuarioSeleccionadoTab = n; renderApp(); };
-
-    window.togglePagoDia = (id) => {
-      const r = historial.find(item => item.id === id);
-      if(r) { r.pagado = !r.pagado; renderApp(); }
-    };
-
-    // MODIFICACIÓN DE HORAS COMPLETA POR ADMIN (Punto 2)
-    window.modificarRegistroManualAdmin = (id) => {
-      const r = historial.find(item => item.id === id);
-      if(!r) return;
-      const nFecha = prompt("Modificar Fecha (AAAA-MM-DD):", r.fecha);
-      const nIn = prompt("Modificar hora ENTRADA (HH:MM):", r.entrada);
-      const nOut = prompt("Modificar hora SALIDA (HH:MM):", r.salida);
-      
-      if(nFecha) r.fecha = nFecha;
-      if(nIn !== null) r.entrada = nIn;
-      if(nOut !== null) r.salida = nOut;
-      renderApp();
-    };
-
-    window.removerRegistro = (id) => {
-      if(confirm("¿Remover asistencia?")){
-        historial = historial.filter(item => item.id !== id);
-        renderApp();
-      }
-    };
-
-    // --- INTERACTIVIDAD DESGLOSE SEMANAS PASADAS (Punto 3) ---
-    window.verDesgloseSemana = (idx) => {
-      const sem = semanasArchivadas[idx];
-      desgloseTitulo.innerText = `🔍 Desglose Semana #${sem.numSemana} (Año)`;
-      
-      if(!sem.datosTurnos || sem.datosTurnos.length === 0) {
-        desgloseTablaLista.innerHTML = `<p class="text-xs text-zinc-500 text-center py-2">No se guardaron registros detallados en este bloque.</p>`;
-      } else {
-        desgloseTablaLista.innerHTML = sem.datosTurnos.map(t => {
-          return `
-            <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 flex flex-col gap-1 text-[11px]">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-white text-xs">${t.nombre}</span>
-                <span class="text-zinc-500">${t.fecha}</span>
-              </div>
-              <div class="flex items-center justify-between text-zinc-400 text-[10px]">
-                <span>In: <strong>${t.entrada}</strong> | Out: <strong>${t.salida || '--:--'}</strong></span>
-                <span class="${t.pagado ? 'text-emerald-400 font-bold' : 'text-zinc-600'}">${t.pagado ? 'Liquidado ✅' : 'No marcado'}</span>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-      desgloseSemanaContenedor.classList.remove('hidden');
-    };
-
-    window.cerrarDesglose = () => { desgloseSemanaContenedor.classList.add('hidden'); };
-
-    // Archivar semana en curso
-    btnArchivarSemana.onclick = () => {
-      if(historial.length === 0) { alert("Sin turnos activos."); return; }
-      if(confirm("¿Cerrar y archivar los balances semanales actuales?")){
-        const numSem = getNumeroSemanaAño(new Date());
-        semanasArchivadas.unshift({
-          archivoId: Date.now(),
-          numSemana: numSem,
-          fechaCierre: new Date().toLocaleDateString('es-MX'),
-          datosTurnos: historial
-        });
-        historial = [];
-        usuarioSeleccionadoTab = "";
-        cerrarDesglose();
-        renderApp();
-        alert("Semana cerrada.");
-      }
-    };
-
-    // Impresión de comprobante seguro
-    btnEnviarReportePdf.onclick = () => {
-      const emp = nombreSelect.value;
-      const turnos = historial.filter(item => item.nombre === emp && item.salida);
-      if(turnos.length === 0) { alert("Sin jornadas completas en la semana."); return; }
-      
-      const printWindow = window.open('', '_blank');
-      printWindow.document.write(`
-        <html><body style="font-family:monospace;padding:20px;">
-          <h2>KIBOU FASHION</h2><hr>
-          <p><strong>Colaborador:</strong> ${emp}</p>
-          <ul>${turnos.map(t => `<li>Fecha: ${t.fecha} | Entrada: ${t.entrada} -> Salida: ${t.salida}</li>`).join('')}</ul>
-          <script>window.print();<\/script>
-        </body></html>
-      `);
-      printWindow.document.close();
-    };
-
-    renderListaUsuariosAdmin();
-    actualizarModo();
-  </script>
+    </script>
 </body>
 </html>
