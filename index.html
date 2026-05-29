@@ -15,14 +15,14 @@
 
     <style>
         :root {
-            --primary: #db2777;       /* Rosa Fuerte Corporativo */
-            --primary-dark: #be185d;  /* Rosa Oscuro para botones activos */
-            --primary-light: #fbcfe8; /* Rosa Claro para fondos sutiles */
-            --background: #fdf2f8;    /* Fondo general con toque rosa muy suave */
+            --primary: #db2777;       
+            --primary-dark: #be185d;  
+            --primary-light: #fbcfe8; 
+            --background: #fdf2f8;    
             --surface: #ffffff;
-            --text: #1e1b4b;          /* Azul oscuro/morado para un contraste elegante */
+            --text: #1e1b4b;          
             --text-light: #6b7280;
-            --border: #f472b6;        /* Bordes sutiles en rosa */
+            --border: #f472b6;        
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
@@ -65,14 +65,16 @@
             font-style: italic;
         }
 
-        .tz-badge {
-            font-size: 0.75rem;
+        .btn-admin-trigger {
+            font-size: 0.85rem;
             background: var(--primary-light);
             color: var(--primary-dark);
-            padding: 0.2rem 0.6rem;
+            padding: 0.3rem 0.7rem;
             border-radius: 20px;
-            font-weight: 600;
-            font-style: normal;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            width: auto;
         }
 
         .container {
@@ -196,6 +198,7 @@
             border: 2px solid var(--primary-light);
         }
 
+        /* Menú Inferior (Oculto por defecto en CSS) */
         nav.nav-bottom {
             position: fixed;
             bottom: 0;
@@ -203,7 +206,7 @@
             right: 0;
             background: var(--surface);
             border-top: 2px solid var(--primary-light);
-            display: flex;
+            display: none; /* CORRECCIÓN: Se oculta por completo */
             justify-content: space-around;
             padding: 0.6rem 0;
             z-index: 100;
@@ -275,10 +278,29 @@
 
     <header>
         <span class="brand-title">✨ Kibou Fashion</span>
-        <span class="tz-badge">Culiacán, Sin.</span>
+        <button class="btn-admin-trigger" id="lock-btn" onclick="abrirLoginAdmin()">🔒 Admin</button>
     </header>
 
     <div class="container">
+
+        <!-- PANEL DE ACCESO ADMIN (VISTA INDEPENDIENTE) -->
+        <section id="view-login-admin" class="view-section">
+            <div class="card">
+                <h2>🔒 Iniciar Sesión de Administrador</h2>
+                <div class="form-group">
+                    <label for="admin-user">Usuario</label>
+                    <input type="text" id="admin-user" placeholder="Ingresa tu usuario">
+                </div>
+                <div class="form-group">
+                    <label for="admin-pass">Contraseña</label>
+                    <input type="password" id="admin-pass" placeholder="Ingresa tu contraseña">
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-primary" onclick="verificarAdmin()">Ingresar</button>
+                    <button class="btn-secondary" onclick="cambiarVista('checador')">Volver</button>
+                </div>
+            </div>
+        </section>
 
         <!-- VISTA: CHECADOR -->
         <section id="view-checador" class="view-section active">
@@ -327,45 +349,30 @@
 
         <!-- VISTA: EMPLEADOS -->
         <section id="view-empleados" class="view-section">
-            <div class="card" id="admin-login-card">
-                <h2>🔒 Acceso Administrador</h2>
+            <div class="card">
+                <h2 id="form-emp-title">👤 Crear / Editar Empleado</h2>
+                <input type="hidden" id="emp-id">
                 <div class="form-group">
-                    <label for="admin-user">Usuario</label>
-                    <input type="text" id="admin-user" placeholder="Ingresa usuario">
+                    <label for="emp-nombre">Nombre Completo</label>
+                    <input type="text" id="emp-nombre" placeholder="Ej. Juan Pérez">
                 </div>
                 <div class="form-group">
-                    <label for="admin-pass">Contraseña</label>
-                    <input type="password" id="admin-pass" placeholder="Ingresa contraseña">
+                    <label for="emp-pin">PIN de Acceso (4 dígitos)</label>
+                    <input type="text" id="emp-pin" pattern="\d*" maxlength="4" placeholder="1234">
                 </div>
-                <button class="btn-primary" onclick="verificarAdmin()">Ingresar Panel</button>
+                <div class="form-group">
+                    <label for="emp-sueldo">Sueldo por Hora ($)</label>
+                    <input type="number" id="emp-sueldo" placeholder="Ej. 100">
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-success" onclick="guardarEmpleado()">Guardar</button>
+                    <button class="btn-secondary" onclick="limpiarFormEmpleado()">Cancelar</button>
+                </div>
             </div>
 
-            <div id="admin-content" style="display: none;">
-                <div class="card">
-                    <h2 id="form-emp-title">👤 Crear / Editar Empleado</h2>
-                    <input type="hidden" id="emp-id">
-                    <div class="form-group">
-                        <label for="emp-nombre">Nombre Completo</label>
-                        <input type="text" id="emp-nombre" placeholder="Ej. Juan Pérez">
-                    </div>
-                    <div class="form-group">
-                        <label for="emp-pin">PIN de Acceso (4 dígitos)</label>
-                        <input type="text" id="emp-pin" pattern="\d*" maxlength="4" placeholder="1234">
-                    </div>
-                    <div class="form-group">
-                        <label for="emp-sueldo">Sueldo por Hora ($)</label>
-                        <input type="number" id="emp-sueldo" placeholder="Ej. 100">
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn-success" onclick="guardarEmpleado()">Guardar</button>
-                        <button class="btn-secondary" onclick="limpiarFormEmpleado()">Cancelar</button>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2>📋 Catálogo de Personal</h2>
-                    <div id="lista-empleados" class="grid-list"></div>
-                </div>
+            <div class="card">
+                <h2>📋 Catálogo de Personal</h2>
+                <div id="lista-empleados" class="grid-list"></div>
             </div>
         </section>
 
@@ -382,8 +389,8 @@
 
     </div>
 
-    <!-- Menú Inferior -->
-    <nav class="nav-bottom">
+    <!-- Menú Inferior (Controlado dinámicamente) -->
+    <nav class="nav-bottom" id="admin-nav">
         <button class="nav-item active" onclick="cambiarVista('checador')">
             <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
             Checador
@@ -403,6 +410,11 @@
         <button class="nav-item" onclick="cambiarVista('historial')">
             <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
             Historial
+        </button>
+        <!-- BOTÓN ADICIONAL PARA CERRAR SESIÓN -->
+        <button class="nav-item" onclick="cerrarSesiónAdmin()" style="color:var(--danger)">
+            <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            Salir
         </button>
     </nav>
 
@@ -478,12 +490,19 @@
             return canvas.toDataURL('image/jpeg', 0.7);
         }
 
-        // --- NAVEGACIÓN ---
+        // --- NAVEGACIÓN Y BLOQUEO DE SEGURIDAD ---
         let isAdminAutenticado = false;
+
+        function abrirLoginAdmin() {
+            document.getElementById('admin-user').value = '';
+            document.getElementById('admin-content').value = '';
+            cambiarVista('login-admin');
+        }
 
         function cambiarVista(vistaId) {
             document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
             document.getElementById(`view-${vistaId}`).classList.add('active');
             
             const btnActivo = Array.from(document.querySelectorAll('.nav-item')).find(btn => btn.getAttribute('onclick').includes(vistaId));
@@ -492,7 +511,7 @@
             if (vistaId === 'checador') iniciarCamara();
             if (vistaId === 'turnos') renderTurnosActivos();
             if (vistaId === 'nomina') { generarSemanasSelect(); renderNomina(); }
-            if (vistaId === 'empleados') evaluarPanelAdmin();
+            if (vistaId === 'empleados') renderListaEmpleados();
             if (vistaId === 'historial') { cargarFiltrosHistorial(); renderHistorial(); }
         }
 
@@ -502,16 +521,36 @@
 
             if(user === USUARIO_ADMIN && pass === CLAVE_ADMIN) {
                 isAdminAutenticado = true;
-                evaluarPanelAdmin();
+                
+                // Mostrar barra de navegación y cambiar botón superior
+                document.getElementById('admin-nav').style.display = 'flex';
+                document.getElementById('lock-btn').innerText = "🔓 Activo";
+                document.getElementById('lock-btn').style.backgroundColor = "var(--success)";
+                document.getElementById('lock-btn').style.color = "white";
+                
+                // Mandar directo al catálogo de personal
+                cambiarVista('empleados');
             } else {
                 alert("Usuario o contraseña de administrador incorrectos.");
             }
         }
 
-        function evaluarPanelAdmin() {
-            document.getElementById('admin-login-card').style.display = isAdminAutenticado ? 'none' : 'block';
-            document.getElementById('admin-content').style.display = isAdminAutenticado ? 'block' : 'none';
-            if(isAdminAutenticado) renderListaEmpleados();
+        function cerrarSesiónAdmin() {
+            isAdminAutenticado = false;
+            
+            // Ocultar barra de navegación y reestablecer botón de bloqueo
+            document.getElementById('admin-nav').style.display = 'none';
+            document.getElementById('lock-btn').innerText = "🔒 Admin";
+            document.getElementById('lock-btn').style.backgroundColor = "var(--primary-light)";
+            document.getElementById('lock-btn').style.color = "var(--primary-dark)";
+            
+            // Limpiar inputs
+            document.getElementById('admin-user').value = '';
+            document.getElementById('admin-pass').value = '';
+            
+            // Regresar forzadamente al checador
+            cambiarVista('checador');
+            alert("Sesión de administrador cerrada. Pantallas bloqueadas.");
         }
 
         // --- CHECADOR ---
