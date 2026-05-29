@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TimeTracker Pro - Equipo</title>
+  <title>TimeTracker Pro - Empresa</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen flex justify-center p-4 selection:bg-indigo-500/30">
@@ -13,7 +13,7 @@
     <div class="flex items-center justify-between mb-1">
       <div>
         <h1 class="text-2xl font-black text-white tracking-tight">TimeTracker</h1>
-        <p class="text-xs text-zinc-500 mt-0.5">Control de Turnos · Personal</p>
+        <p class="text-xs text-zinc-500 mt-0.5">Control de Turnos · Sistema Empresarial</p>
       </div>
       
       <div class="flex flex-col items-end gap-1">
@@ -25,69 +25,79 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-3">
-      <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">⏱️ Horas Totales</span>
-        <span id="total-horas-txt" class="text-2xl font-black text-white mt-1">0.00h</span>
+    <div id="panel-admin-totales" class="hidden flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">⏱️ Horas Totales</span>
+          <span id="total-horas-txt" class="text-2xl font-black text-white mt-1">0.00h</span>
+        </div>
+        <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-500">💵 Total Neto</span>
+          <span id="total-dinero-txt" class="text-2xl font-black text-emerald-400 mt-1">$0.00</span>
+        </div>
       </div>
-      <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
-        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-500">💵 Total Neto</span>
-        <span id="total-dinero-txt" class="text-2xl font-black text-emerald-400 mt-1">$0.00</span>
-      </div>
-    </div>
 
-    <div id="wrapper-tarifa" class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between text-sm shadow-md transition-opacity">
-      <span class="text-zinc-400 font-medium">Pago por hora (Admin):</span>
-      <div class="flex items-center gap-1 bg-zinc-950 px-3 py-1.5 rounded-xl border border-zinc-800">
-        <span class="text-zinc-500 font-bold">$</span>
-        <input type="number" id="tarifa-input" value="22.01" step="0.01" class="bg-transparent text-emerald-400 font-black text-right w-16 outline-none" disabled>
-        <span class="text-zinc-600 font-medium text-xs ml-1">/ hr</span>
+      <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 shadow-md">
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-zinc-400 font-medium">Pago por hora (Configuración):</span>
+          <div class="flex items-center gap-1 bg-zinc-950 px-3 py-1.5 rounded-xl border border-zinc-800">
+            <span class="text-zinc-500 font-bold">$</span>
+            <input type="number" id="tarifa-input" value="22.01" step="0.01" class="bg-transparent text-emerald-400 font-black text-right w-16 outline-none">
+            <span class="text-zinc-600 font-medium text-xs ml-1">/ hr</span>
+          </div>
+        </div>
+        <hr class="border-zinc-800/80">
+        <div>
+          <label class="block text-[10px] font-bold text-zinc-500 mb-1 uppercase tracking-wider">Añadir Nuevo Usuario al Sistema</label>
+          <div class="flex gap-2">
+            <input type="text" id="nuevo-usuario-input" placeholder="Nombre de trabajador" class="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl p-2 text-xs text-white outline-none">
+            <button type="button" id="btn-add-user" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 rounded-xl text-xs">Agregar</button>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="bg-zinc-900/60 border border-zinc-800/80 p-5 rounded-3xl flex flex-col gap-4 shadow-xl">
-      <h2 class="text-sm font-bold text-white tracking-wide">Nuevo Registro Diario</h2>
+      <h2 class="text-sm font-bold text-white tracking-wide">Fichaje de Turno Diario</h2>
 
       <div>
-        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">👤 Nombre del Trabajador</label>
-        <input type="text" id="nombre-input" placeholder="Escribe tu nombre completo" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none focus:border-indigo-500 transition-colors">
+        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">👤 Selecciona tu Nombre</label>
+        <select id="nombre-select" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none focus:border-indigo-500 transition-colors" style="color-scheme: dark;">
+          </select>
       </div>
 
       <div>
-        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">Fecha</label>
-        <input type="date" id="fecha-input" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none transition-colors opacity-60" style="color-scheme: dark;" disabled>
-        <p id="fecha-warning" class="text-[10px] text-zinc-500 mt-1">La fecha se asigna en tiempo real (Solo un Admin puede cambiarla).</p>
+        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">Fecha de Registro</label>
+        <input type="date" id="fecha-input" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none transition-colors" style="color-scheme: dark;" disabled>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">📸 Foto Obligatoria de Entrada</label>
+        <div class="flex flex-col gap-2">
+          <input type="file" id="foto-input" accept="image/*" capture="camera" class="hidden">
+          <button type="button" id="btn-tomar-foto" class="w-full py-3 bg-zinc-950 border border-dashed border-zinc-700 text-indigo-400 font-bold rounded-xl text-xs hover:border-indigo-500 transition-all flex items-center justify-center gap-2">
+            📷 Capturar Foto para Registrar Entrada
+          </button>
+          
+          <div id="preview-container" class="hidden relative rounded-xl overflow-hidden border border-zinc-800">
+            <img id="foto-preview" class="w-full h-44 object-cover" src="" alt="Evidencia">
+            <div class="absolute bottom-0 inset-x-0 bg-black/80 p-2 text-[10px] text-zinc-300 font-mono">
+              <span id="watermark-text-preview"></span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">🛫 Entrada</label>
-          <div class="flex gap-1 bg-zinc-950 border border-zinc-800 rounded-xl p-1">
-            <input type="time" id="entrada-input" class="w-full bg-transparent p-2 text-center text-sm font-bold text-white outline-none" style="color-scheme: dark;">
-            <button type="button" id="btn-now-entrada" class="bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 font-bold px-2.5 rounded-lg active:scale-90 transition-transform text-xs">▶️</button>
-          </div>
+          <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">🛫 Hora Entrada</label>
+          <input type="time" id="entrada-input" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-center text-sm font-bold text-zinc-400 outline-none" style="color-scheme: dark;" disabled>
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">🛬 Salida</label>
+          <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">🛬 Hora Salida</label>
           <div class="flex gap-1 bg-zinc-950 border border-zinc-800 rounded-xl p-1">
-            <input type="time" id="salida-input" class="w-full bg-transparent p-2 text-center text-sm font-bold text-white outline-none" style="color-scheme: dark;">
-            <button type="button" id="btn-now-salida" class="bg-rose-600/20 border border-rose-500/30 text-rose-400 font-bold px-2.5 rounded-lg active:scale-90 transition-transform text-xs">⏹️</button>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">📸 Foto de Evidencia (Obligatoria)</label>
-        <div class="flex flex-col gap-2">
-          <input type="file" id="foto-input" accept="image/*" capture="camera" class="hidden">
-          <button type="button" id="btn-tomar-foto" class="w-full py-2.5 bg-zinc-950 border border-dashed border-zinc-700 text-zinc-400 font-semibold rounded-xl text-xs hover:border-indigo-500 hover:text-white transition-all flex items-center justify-center gap-2">
-            📷 Tomar Foto de Entrada
-          </button>
-          <div id="preview-container" class="hidden relative rounded-xl overflow-hidden border border-zinc-800">
-            <img id="foto-preview" class="w-full h-40 object-cover" src="" alt="Evidencia">
-            <div class="absolute bottom-0 inset-x-0 bg-black/70 p-2 text-[10px] text-zinc-300 font-mono flex flex-col">
-              <span id="watermark-text-preview">Marca de agua digital activa</span>
-            </div>
+            <input type="time" id="salida-input" class="w-full bg-transparent p-2 text-center text-sm font-bold text-white outline-none" style="color-scheme: dark;" disabled>
+            <button type="button" id="btn-now-salida" class="bg-rose-600/20 border border-rose-500/30 text-rose-400 font-bold px-2 rounded-lg text-xs">⏹️ Marcar</button>
           </div>
         </div>
       </div>
@@ -100,16 +110,19 @@
         </div>
       </div>
 
-      <button type="button" id="btn-guardar" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold rounded-xl text-sm shadow-lg shadow-indigo-950 transition-all active:scale-[0.97] mt-1 flex items-center justify-center gap-2">
-        📥 Guardar Turno en Historial
+      <button type="button" id="btn-guardar" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold rounded-xl text-sm shadow-lg shadow-indigo-950 transition-all active:scale-[0.97] mt-1 flex items-center justify-center gap-2">
+        📥 Guardar y Enviar Turno
       </button>
     </div>
 
-    <div class="flex flex-col gap-2.5">
+    <div id="panel-historial-admin" class="hidden flex flex-col gap-3">
       <div class="flex items-center justify-between px-1">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">📅 Historial de Días</h2>
-        <button type="button" id="btn-clear-all" class="text-[11px] font-medium text-rose-400 hover:text-rose-300 transition-colors hidden">🗑️ Limpiar todo (Admin)</button>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">📅 Control de Asistencias Semanal</h2>
+        <button type="button" id="btn-archivar-semana" class="text-[11px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-2 py-1 rounded-lg">🗄️ Archivar Semana</button>
       </div>
+
+      <div id="tabs-trabajadores" class="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        </div>
       
       <div id="historial-lista" class="flex flex-col gap-2"></div>
     </div>
@@ -119,9 +132,9 @@
   <canvas id="watermark-canvas" class="hidden"></canvas>
 
   <script>
-    // CLAVE DE ADMINISTRADOR (Cambiala aquí por la que tú quieras)
     const CLAVE_ADMIN = "1234";
     let esAdmin = false;
+    let usuarioSeleccionadoTab = "";
 
     // Elementos DOM
     const tarifaInput = document.getElementById('tarifa-input');
@@ -129,21 +142,25 @@
     const entradaInput = document.getElementById('entrada-input');
     const salidaInput = document.getElementById('salida-input');
     const descansoInput = document.getElementById('descanso-input');
-    const nombreInput = document.getElementById('nombre-input');
+    const nombreSelect = document.getElementById('nombre-select');
     const btnGuardar = document.getElementById('btn-guardar');
-    const btnClearAll = document.getElementById('btn-clear-all');
+    const btnArchivarSemana = document.getElementById('btn-archivar-semana');
     const historialLista = document.getElementById('historial-lista');
+    const tabsTrabajadores = document.getElementById('tabs-trabajadores');
     
     const totalHorasTxt = document.getElementById('total-horas-txt');
     const totalDineroTxt = document.getElementById('total-dinero-txt');
 
-    // Elementos del Rol y Fotos
     const btnToggleAdmin = document.getElementById('btn-toggle-admin');
     const adminDot = document.getElementById('admin-dot');
     const adminTxt = document.getElementById('admin-txt');
-    const wrapperTarifa = document.getElementById('wrapper-tarifa');
-    const fechaWarning = document.getElementById('fecha-warning');
     
+    const panelAdminTotales = document.getElementById('panel-admin-totales');
+    const panelHistorialAdmin = document.getElementById('panel-historial-admin');
+    
+    const nuevoUsuarioInput = document.getElementById('nuevo-usuario-input');
+    const btnAddUser = document.getElementById('btn-add-user');
+
     const fotoInput = document.getElementById('foto-input');
     const btnTomarFoto = document.getElementById('btn-tomar-foto');
     const previewContainer = document.getElementById('preview-container');
@@ -151,83 +168,83 @@
     const watermarkTextPreview = document.getElementById('watermark-text-preview');
     const watermarkCanvas = document.getElementById('watermark-canvas');
 
-    // Variable global para retener la imagen final procesada
     let fotoProcesadaDataUrl = "";
 
-    // Forzar fecha de hoy de inicio
-    const establecerFechaHoy = () => {
-      fechaInput.value = new Date().toISOString().slice(0, 10);
-    };
-    establecerFechaHoy();
+    const resetFechaHoy = () => { fechaInput.value = new Date().toISOString().slice(0, 10); };
+    resetFechaHoy();
 
-    let historial = JSON.parse(localStorage.getItem('tt_data') || '[]');
-    let tarifa = parseFloat(localStorage.getItem('tt_tarifa') || '22.01');
+    // Base de datos persistente en LocalStorage
+    let historial = JSON.parse(localStorage.getItem('tt_emp_data') || '[]');
+    let usuariosSistema = JSON.parse(localStorage.getItem('tt_emp_users') || '["Juan Perez", "Maria Gomez"]');
+    let tarifa = parseFloat(localStorage.getItem('tt_emp_tarifa') || '22.01');
     tarifaInput.value = tarifa;
-
-    entradaInput.value = localStorage.getItem('tt_last_entrada') || '';
-    salidaInput.value = localStorage.getItem('tt_last_salida') || '';
-    nombreInput.value = localStorage.getItem('tt_last_nombre') || '';
 
     const getHM = () => {
       const d = new Date();
       return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     };
 
-    const saveCurrentInputs = () => {
-      localStorage.setItem('tt_last_entrada', entradaInput.value);
-      localStorage.setItem('tt_last_salida', salidaInput.value);
-      localStorage.setItem('tt_last_nombre', nombreInput.value);
+    // Actualizar nombres en el selector
+    const renderUsuariosSelect = () => {
+      nombreSelect.innerHTML = usuariosSistema.map(u => `<option value="${u}">${u}</option>`).join('');
     };
 
-    document.getElementById('btn-now-entrada').onclick = () => { entradaInput.value = getHM(); saveCurrentInputs(); };
-    document.getElementById('btn-now-salida').onclick = () => { salidaInput.value = getHM(); saveCurrentInputs(); };
-    entradaInput.onchange = saveCurrentInputs;
-    salidaInput.onchange = saveCurrentInputs;
-    nombreInput.oninput = saveCurrentInputs;
-
-    // --- LÓGICA DE CONTROL DE ROLES (ADMIN / TRABAJADOR) ---
-    btnToggleAdmin.onclick = () => {
-      if (!esAdmin) {
-        const pass = prompt("Introduce la clave maestra de Administrador:");
-        if (pass === CLAVE_ADMIN) {
-          esAdmin = true;
-          actualizarInterfazRol();
-        } else {
-          alert("Clave incorrecta. Acceso denegado.");
-        }
-      } else {
-        esAdmin = false;
-        actualizarInterfazRol();
+    // Agregar Usuario (Solo Admin)
+    btnAddUser.onclick = () => {
+      const nuevo = nuevoUsuarioInput.value.trim();
+      if(nuevo && !usuariosSistema.includes(nuevo)) {
+        usuariosSistema.push(nuevo);
+        localStorage.setItem('tt_emp_users', JSON.stringify(usuariosSistema));
+        renderUsuariosSelect();
+        nuevoUsuarioInput.value = "";
+        renderApp();
       }
     };
 
-    const actualizarInterfazRol = () => {
+    // Forzar marcaje de salida manual
+    document.getElementById('btn-now-salida').onclick = () => {
+      salidaInput.value = getHM();
+    };
+
+    // --- INTERRUPTOR DE ADMIN / TRABAJADOR ---
+    btnToggleAdmin.onclick = () => {
+      if (!esAdmin) {
+        const pass = prompt("Clave de Administrador:");
+        if (pass === CLAVE_ADMIN) {
+          esAdmin = true;
+          actualizarModo();
+        } else { alert("Clave Errónea."); }
+      } else {
+        esAdmin = false;
+        actualizarModo();
+      }
+    };
+
+    const actualizarModo = () => {
       if (esAdmin) {
         adminDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
         adminTxt.innerText = "Administrador";
         adminTxt.className = "text-emerald-400";
         fechaInput.disabled = false;
-        fechaInput.classList.remove('opacity-60');
-        tarifaInput.disabled = false;
-        btnClearAll.classList.remove('hidden');
-        fechaWarning.innerText = "🔑 Tienes permiso para modificar la fecha de este registro.";
-        fechaWarning.className = "text-[10px] text-emerald-500 mt-1";
+        entradaInput.disabled = false;
+        salidaInput.disabled = false;
+        panelAdminTotales.classList.remove('hidden');
+        panelHistorialAdmin.classList.remove('hidden');
       } else {
         adminDot.className = "w-2 h-2 rounded-full bg-zinc-600";
         adminTxt.innerText = "Trabajador";
         adminTxt.className = "text-zinc-400";
         fechaInput.disabled = true;
-        fechaInput.classList.add('opacity-60');
-        establecerFechaHoy(); // Forzar hoy otra vez
-        tarifaInput.disabled = true;
-        btnClearAll.classList.add('hidden');
-        fechaWarning.innerText = "La fecha se asigna en tiempo real (Solo un Admin puede cambiarla).";
-        fechaWarning.className = "text-[10px] text-zinc-500 mt-1";
+        entradaInput.disabled = true;
+        salidaInput.disabled = true;
+        resetFechaHoy();
+        panelAdminTotales.classList.add('hidden');
+        panelHistorialAdmin.classList.add('hidden');
       }
-      renderApp(); // Volver a pintar para ocultar/mostrar botones de borrar en la lista
+      renderApp();
     };
 
-    // --- MANEJO DE FOTO Y ESTAMPADO DE HORA (MARCA DE AGUA) ---
+    // --- PROCESAMIENTO AUTOMÁTICO DE FOTO Y HORA ENTRADA (Puntos 1 y 1.1) ---
     btnTomarFoto.onclick = () => fotoInput.click();
 
     fotoInput.onchange = (e) => {
@@ -239,147 +256,132 @@
         const img = new Image();
         img.onload = function() {
           const ctx = watermarkCanvas.getContext('2d');
-          
-          // Redimensionar para no saturar el LocalStorage (Máximo 600px)
-          const maxDim = 600;
-          let w = img.width;
-          let h = img.height;
-          if (w > h) {
-            if (w > maxDim) { h *= maxDim / w; w = maxDim; }
-          } else {
-            if (h > maxDim) { w *= maxDim / h; h = maxDim; }
+          const maxDim = 500; // Optimizar almacenamiento
+          let w = img.width, h = img.height;
+          if (w > h ? w > maxDim : h > maxDim) {
+            if (w > h) { h *= maxDim / w; w = maxDim; } else { w *= maxDim / h; h = maxDim; }
           }
-          
-          watermarkCanvas.width = w;
-          watermarkCanvas.height = h;
+          watermarkCanvas.width = w; watermarkCanvas.height = h;
           ctx.drawImage(img, 0, 0, w, h);
 
-          // Generar datos exactos del instante actual
+          // Captura automática e inalterable de la hora de entrada al tomar la foto
+          const horaFichada = getHM();
+          entradaInput.value = horaFichada;
+
           const ahora = new Date();
-          const fechaStr = ahora.toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
-          const horaStr = ahora.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-          const empleado = nombreInput.value.trim() || "Empleado No Identificado";
-          const textoMarca = `📍 ${fechaStr} ${horaStr} | Empleado: ${empleado}`;
+          const marcaTexto = `📸 ENTRADA: ${ahora.toLocaleDateString('es-MX')} - ${ahora.toLocaleTimeString('es-MX')} | ${nombreSelect.value}`;
 
-          // Dibujar fondo negro de seguridad para el texto
-          ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-          ctx.fillRect(0, h - 35, w, 35);
+          ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+          ctx.fillRect(0, h - 30, w, 30);
+          ctx.fillStyle = "#34d399"; // Verde esmeralda intocable
+          ctx.font = "bold 12px monospace";
+          ctx.fillText(marcaTexto, 10, h - 10);
 
-          // Dibujar el texto indeleble
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "bold 14px monospace";
-          ctx.fillText(textoMarca, 12, h - 12);
-
-          // Extraer la imagen lista en formato comprimido (JPEG)
           fotoProcesadaDataUrl = watermarkCanvas.toDataURL('image/jpeg', 0.7);
-          
-          // Mostrar previsualización en la pantalla
           fotoPreview.src = fotoProcesadaDataUrl;
-          watermarkTextPreview.innerText = textoMarca;
+          watermarkTextPreview.innerText = marcaTexto;
           previewContainer.classList.remove('hidden');
-          btnTomarFoto.innerText = "🔄 Cambiar Foto";
+          btnTomarFoto.innerText = "🔄 Foto Capturada Exitosamente";
         };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
     };
 
-    // --- RENDERIZADO DE LA APLICACIÓN ---
+    // --- RENDERIZADO DEL PANEL DE ADMINISTRACIÓN POR PESTAÑAS (Punto 3) ---
     const renderApp = () => {
-      localStorage.setItem('tt_data', JSON.stringify(historial));
-      localStorage.setItem('tt_tarifa', tarifa.toString());
+      localStorage.setItem('tt_emp_data', JSON.stringify(historial));
+      localStorage.setItem('tt_emp_tarifa', tarifa.toString());
 
+      if (!esAdmin) return;
+
+      // Obtener trabajadores con asistencias reales
+      const trabajadoresActivos = [...new Set(historial.map(item => item.nombre))];
+      if (trabajadoresActivos.length > 0 && !usuarioSeleccionadoTab) {
+        usuarioSeleccionadoTab = trabajadoresActivos[0];
+      }
+
+      // Render de pestañas
+      tabsTrabajadores.innerHTML = trabajadoresActivos.map(t => {
+        const activeClass = usuarioSeleccionadoTab === t ? 'bg-indigo-600 text-white border-indigo-500' : 'bg-zinc-900 text-zinc-400 border-zinc-800';
+        return `<button onclick="cambiarTab('${t}')" class="px-3 py-1.5 text-xs font-extrabold rounded-xl border ${activeClass} whitespace-nowrap">${t}</button>`;
+      }).join('');
+
+      // Filtrar el historial por la pestaña activa
+      const registrosFiltrados = historial.filter(item => item.nombre === usuarioSeleccionadoTab);
       historialLista.innerHTML = '';
-      let globalHoras = 0;
+      let totalHorasFiltro = 0;
 
-      if (historial.length === 0) {
-        historialLista.innerHTML = `<div class="bg-zinc-900/30 border border-dashed border-zinc-800/60 rounded-2xl p-6 text-center text-xs text-zinc-600 font-medium">No hay registros guardados.</div>`;
+      if (registrosFiltrados.length === 0) {
+        historialLista.innerHTML = `<div class="bg-zinc-900/30 border border-dashed border-zinc-800/60 rounded-2xl p-6 text-center text-xs text-zinc-600 font-medium">Sin registros guardados esta semana para este empleado.</div>`;
       } else {
-        historial.forEach((item, index) => {
+        registrosFiltrados.forEach((item) => {
           const [eH, eM] = item.entrada.split(':').map(Number);
           let [sH, sM] = item.salida.split(':').map(Number);
-          
           let diffMin = (sH * 60 + sM) - (eH * 60 + eM);
-          if (diffMin <= 0) diffMin += 24 * 60; 
-          
+          if (diffMin <= 0) diffMin += 24 * 60;
+
           const horasNetas = Math.max(0, (diffMin - item.descanso) / 60);
-          globalHoras += horasNetas;
+          totalHorasFiltro += horasNetas;
           const pagoDia = horasNetas * tarifa;
 
           const [y, m, d] = item.fecha.split('-');
-          const dateObj = new Date(y, m - 1, d);
-          const fechaFormato = dateObj.toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
-
-          // Validar si tiene foto cargada
-          const miniFotoHtml = item.foto ? `
-            <div class="mt-2 relative rounded-lg overflow-hidden border border-zinc-800 w-full max-w-[180px]">
-              <img src="${item.foto}" class="w-full h-20 object-cover cursor-zoom-in" onclick="alert('Datos de Validación:\\n${item.nombre || 'Desconocido'}')">
-            </div>
-          ` : '<span class="text-[10px] text-rose-400 block mt-1">⚠️ Sin foto registrada</span>';
-
-          // El botón de eliminar registro sólo aparece o es funcional si eres Admin
-          const botonEliminarHtml = esAdmin ? `
-            <button onclick="eliminarDia(${index})" class="text-zinc-600 hover:text-rose-400 text-xs active:scale-90 transition-transform px-1 font-bold">✕</button>
-          ` : `
-            <button onclick="intentarEliminarSinPermiso()" class="text-zinc-800 text-xs px-1 font-bold">✕</button>
-          `;
+          const fechaFormato = new Date(y, m - 1, d).toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
 
           historialLista.innerHTML += `
-            <div class="bg-zinc-900/50 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-1 relative overflow-hidden shadow-sm">
+            <div class="bg-zinc-900/50 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-2 relative shadow-sm">
               <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500"></div>
-              <div class="flex items-center justify-between pl-2">
+              <div class="flex items-start justify-between pl-2">
                 <div>
                   <span class="text-xs font-black text-white capitalize">${fechaFormato}</span>
-                  <span class="text-[10px] bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded ml-1.5 font-bold">${item.nombre || 'Anonimo'}</span>
-                  <div class="flex gap-2.5 text-[10px] text-zinc-500 mt-0.5 font-bold">
-                    <span>In: <strong class="text-zinc-300">${item.entrada}</strong></span>
-                    <span>Out: <strong class="text-zinc-300">${item.salida}</strong></span>
-                    <span>Break: <strong class="text-zinc-400">${item.descanso}m</strong></span>
+                  <div class="flex gap-2.5 text-[10px] text-zinc-400 mt-1 font-bold">
+                    <span>Entrada: <strong class="text-indigo-400">${item.entrada}</strong></span>
+                    <span>Salida: <strong class="text-rose-400">${item.salida || '--:--'}</strong></span>
+                    <span>Descanso: <strong class="text-zinc-500">${item.descanso}m</strong></span>
                   </div>
-                  ${miniFotoHtml}
                 </div>
-                <div class="flex items-center gap-3">
-                  <div class="text-right">
-                    <span class="text-sm font-black text-emerald-400 block">$${pagoDia.toFixed(2)}</span>
-                    <span class="text-[10px] text-zinc-500 font-bold block">${horasNetas.toFixed(2)} hrs</span>
-                  </div>
-                  ${botonEliminarHtml}
+                <div class="text-right">
+                  <span class="text-sm font-black text-emerald-400 block">$${pagoDia.toFixed(2)}</span>
+                  <span class="text-[10px] text-zinc-500 font-bold block">${horasNetas.toFixed(2)} hrs</span>
                 </div>
               </div>
+              <div class="pl-2 mt-1">
+                <img src="${item.foto}" class="w-full h-32 object-cover rounded-xl border border-zinc-800/80">
+              </div>
+              <button onclick="eliminarRegistro(${item.id})" class="absolute top-2 right-2 text-zinc-700 hover:text-rose-400 font-bold text-xs">✕</button>
             </div>
           `;
         });
       }
 
-      totalHorasTxt.innerText = `${globalHoras.toFixed(2)}h`;
-      totalDineroTxt.innerText = `$${(globalHoras * tarifa).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      totalHorasTxt.innerText = `${totalHorasFiltro.toFixed(2)}h`;
+      totalDineroTxt.innerText = `$${(totalHorasFiltro * tarifa).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+    };
+
+    window.cambiarTab = (nombre) => {
+      usuarioSeleccionadoTab = nombre;
+      renderApp();
     };
 
     tarifaInput.oninput = (e) => {
-      if(!esAdmin) return;
       tarifa = parseFloat(e.target.value) || 0;
       renderApp();
     };
 
-    // --- ACCIÓN DE GUARDADO ---
+    // --- ACCIÓN DE GUARDADO Y WHATSAPP (Punto 2) ---
     btnGuardar.onclick = () => {
-      const nombreVal = nombreInput.value.trim();
-      if (!nombreVal) {
-        alert('Por favor, introduce tu nombre antes de guardar.');
+      if (!entradaInput.value) {
+        alert('Es obligatorio tomarse la foto de evidencia para registrar la entrada.');
         return;
       }
-      if (!entradaInput.value || !salidaInput.value) {
-        alert('Pon la hora de Entrada y Salida, porfa.');
-        return;
-      }
-      if (!fotoProcesadaDataUrl) {
-        alert('Obligatorio: Tienes que tomarte una foto como evidencia de entrada.');
+      if (!salidaInput.value) {
+        alert('Por favor marca tu hora de salida antes de guardar el turno.');
         return;
       }
 
       const nuevoTurno = {
         id: Date.now(),
-        nombre: nombreVal,
+        nombre: nombreSelect.value,
         fecha: fechaInput.value,
         entrada: entradaInput.value,
         salida: salidaInput.value,
@@ -388,55 +390,53 @@
       };
 
       historial.unshift(nuevoTurno);
-      
-      const originalText = btnGuardar.innerText;
-      btnGuardar.innerText = '✅ ¡Turno Registrado!';
-      btnGuardar.style.opacity = '0.7';
-      
-      setTimeout(() => {
-        btnGuardar.innerText = originalText;
-        btnGuardar.style.opacity = '1';
-      }, 1200);
+      usuarioSeleccionadoTab = nombreSelect.value;
 
-      // Limpiar datos de la foto para el siguiente turno
+      // Generación automática del mensaje para WhatsApp (Punto 2)
+      const msg = `📌 *TimeTracker Pro*\n⚡ *Turno Iniciado / Guardado*\n👤 *Trabajador:* ${nuevoTurno.nombre}\n📅 *Fecha:* ${nuevoTurno.fecha}\n🛫 *Entrada:* ${nuevoTurno.entrada}\n🛬 *Salida:* ${nuevoTurno.salida}\n☕ *Descanso:* ${nuevoTurno.descanso} min`;
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      
+      alert("Turno registrado exitosamente localmente. Se procederá a enviar confirmación por WhatsApp.");
+      window.open(whatsappUrl, '_blank');
+
+      // Limpieza de campos de fichaje
       fotoProcesadaDataUrl = "";
       previewContainer.classList.add('hidden');
-      btnTomarFoto.innerText = "📷 Tomar Foto de Entrada";
-      fotoInput.value = "";
-
+      entradaInput.value = "";
+      salidaInput.value = "";
+      btnTomarFoto.innerText = "📷 Capturar Foto para Registrar Entrada";
+      
       renderApp();
     };
 
-    // --- SEGURIDAD EN EL HISTORIAL ---
-    window.eliminarDia = (index) => {
-      if (!esAdmin) {
-        intentarEliminarSinPermiso();
-        return;
+    // --- ARCHIVAR SEMANA / HISTORIALES SEPARADOS (Punto 4) ---
+    btnArchivarSemana.onclick = () => {
+      if (confirm('¿Deseas archivar y dar por cerrada la semana de comisiones actual? Los totales volverán a comenzar desde ceros.')) {
+        let archivadosSemanas = JSON.parse(localStorage.getItem('tt_emp_archivados') || '[]');
+        archivadosSemanas.push({
+          semanaCierreId: Date.now(),
+          fechaArchivo: new Date().toLocaleDateString('es-MX'),
+          datos: historial
+        });
+        localStorage.setItem('tt_emp_archivados', JSON.stringify(archivadosSemanas));
+        
+        historial = []; // Limpiamos la semana en curso
+        usuarioSeleccionadoTab = "";
+        renderApp();
+        alert("Semana archivada exitosamente en el historial del negocio.");
       }
-      if (confirm('¿Quieres eliminar este registro del historial?')) {
-        historial.splice(index, 1);
+    };
+
+    window.eliminarRegistro = (id) => {
+      if(confirm("¿Seguro que deseas remover este registro?")){
+        historial = historial.filter(item => item.id !== id);
         renderApp();
       }
     };
 
-    window.intentarEliminarSinPermiso = () => {
-      alert("🔒 Bloqueado: Solo un administrador con clave puede eliminar registros.");
-    };
-
-    btnClearAll.onclick = () => {
-      if (!esAdmin) return;
-      if (confirm('¿De verdad quieres borrar todo el historial del equipo?')) {
-        historial = [];
-        localStorage.removeItem('tt_last_entrada');
-        localStorage.removeItem('tt_last_salida');
-        entradaInput.value = '';
-        salidaInput.value = '';
-        renderApp();
-      }
-    };
-
-    // Inicializar la vista
-    actualizarInterfazRol();
+    // Inicialización de la WebApp
+    renderUsuariosSelect();
+    actualizarModo();
   </script>
 </body>
 </html>
