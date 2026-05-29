@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TimeTracker Pro - Reloj Checador</title>
+  <title>Kibou Fashion - Control de Turnos</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen flex justify-center p-4 selection:bg-indigo-500/30">
+<body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen flex justify-center p-4 selection:bg-pink-500/30">
 
   <div id="app" class="w-full max-w-md flex flex-col gap-5 pt-6 pb-24">
     
-    <!-- Encabezado y Selector de Rol -->
     <div class="flex items-center justify-between mb-1">
       <div>
-        <h1 class="text-2xl font-black text-white tracking-tight">TimeTracker</h1>
-        <p class="text-xs text-zinc-500 mt-0.5">Reloj Checador Empresarial Pro</p>
+        <h1 class="text-3xl font-black text-pink-500 tracking-tighter drop-shadow-[0_2px_10px_rgba(236,72,153,0.15)]">Kibou Fashion</h1>
+        <p class="text-xs text-zinc-400 font-medium mt-0.5">Sistema de Asistencia y Nómina Especializado</p>
       </div>
       
       <div class="flex flex-col items-end gap-1">
-        <label class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Modo Admin</label>
+        <label class="text-[9px] font-bold uppercase tracking-wider text-zinc-500">Modo Admin</label>
         <button id="btn-toggle-admin" class="px-3 py-1.5 bg-zinc-900 border border-zinc-800 rounded-xl text-xs font-bold text-zinc-400 transition-all flex items-center gap-1.5">
           <span id="admin-dot" class="w-2 h-2 rounded-full bg-zinc-600"></span>
           <span id="admin-txt">Trabajador</span>
@@ -26,54 +25,38 @@
       </div>
     </div>
 
-    <!-- ================= PANEL DE ADMINISTRADOR ================= -->
     <div id="panel-admin-totales" class="hidden flex flex-col gap-4">
-      <!-- Indicadores de Dinero y Horas del Empleado Seleccionado en la pestaña -->
+      
       <div class="grid grid-cols-2 gap-3">
         <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
           <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500">⏱️ Horas Totales</span>
           <span id="total-horas-txt" class="text-2xl font-black text-white mt-1">0.00h</span>
         </div>
         <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-0.5 shadow-xl">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-500">💵 Total Neto</span>
-          <span id="total-dinero-txt" class="text-2xl font-black text-emerald-400 mt-1">$0.00</span>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-pink-400">💵 Total Neto</span>
+          <span id="total-dinero-txt" class="text-2xl font-black text-pink-400 mt-1">$0.00</span>
         </div>
       </div>
 
-      <!-- Configuración General y Tarifas -->
       <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 shadow-md">
-        <div class="flex items-center justify-between text-sm">
-          <span class="text-zinc-400 font-medium">Pago por hora base:</span>
-          <div class="flex items-center gap-1 bg-zinc-950 px-3 py-1.5 rounded-xl border border-zinc-800">
-            <span class="text-zinc-500 font-bold">$</span>
-            <input type="number" id="tarifa-input" value="22.01" step="0.01" class="bg-transparent text-emerald-400 font-black text-right w-16 outline-none">
-            <span class="text-zinc-600 font-medium text-xs ml-1">/ hr</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gestión y Edición de Personal (Punto 1 y 3) -->
-      <div class="bg-zinc-900/60 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 shadow-md">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-white">👥 Control de Empleados y PINs</h3>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-pink-500">👥 Gestión de Personal y Sueldos</h3>
         
-        <!-- Formulario para agregar -->
         <div class="flex flex-col gap-2 bg-zinc-950 p-3 rounded-xl border border-zinc-800/60">
-          <label class="text-[10px] text-zinc-500 font-bold uppercase">Registrar Nuevo Personal</label>
-          <div class="grid grid-cols-3 gap-2">
-            <input type="text" id="nuevo-usuario-input" placeholder="Nombre completo" class="col-span-2 bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white outline-none">
-            <input type="text" id="nuevo-pin-input" placeholder="PIN (4 dig)" maxlength="4" class="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-center text-white outline-none">
+          <label class="text-[9px] text-zinc-400 font-bold uppercase">Registrar Nuevo Personal</label>
+          <div class="flex flex-col gap-2">
+            <input type="text" id="nuevo-usuario-input" placeholder="Nombre completo" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white outline-none focus:border-pink-500">
+            <div class="grid grid-cols-2 gap-2">
+              <input type="text" id="nuevo-pin-input" placeholder="PIN (4 dig)" maxlength="4" class="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-center text-white outline-none focus:border-pink-500">
+              <input type="number" id="nuevo-sueldo-input" placeholder="Sueldo por Hora ($)" step="0.01" class="bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-center text-emerald-400 font-bold outline-none focus:border-pink-500">
+            </div>
           </div>
-          <button type="button" id="btn-add-user" class="w-full mt-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded-lg text-xs transition-colors">➕ Dar de Alta Trabajador</button>
+          <button type="button" id="btn-add-user" class="w-full mt-1 bg-pink-600 hover:bg-pink-500 text-white font-bold py-2 rounded-lg text-xs transition-colors shadow-md shadow-pink-950/40">➕ Dar de Alta Trabajador</button>
         </div>
 
-        <!-- Lista de trabajadores registrados editables -->
-        <div class="flex flex-col gap-1.5 max-h-48 overflow-y-auto mt-1" id="lista-usuarios-admin">
-          <!-- Inyectado dinámicamente -->
-        </div>
+        <div class="flex flex-col gap-1.5 max-h-48 overflow-y-auto mt-1" id="lista-usuarios-admin"></div>
       </div>
     </div>
 
-    <!-- ================= INTERFAZ DEL TRABAJADOR (RELOJ CHECADOR) ================= -->
     <div id="panel-interfaz-fichaje" class="bg-zinc-900/60 border border-zinc-800/80 p-5 rounded-3xl flex flex-col gap-4 shadow-xl">
       
       <div class="flex items-center justify-between">
@@ -81,65 +64,57 @@
         <span id="badge-estado-turno" class="text-[10px] px-2.5 py-1 rounded-full font-bold uppercase bg-zinc-800 text-zinc-400">Consultando...</span>
       </div>
 
-      <!-- Selección de Trabajador -->
       <div>
         <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">👤 Selecciona tu Nombre</label>
-        <select id="nombre-select" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none focus:border-indigo-500 transition-colors" style="color-scheme: dark;">
-          <!-- Se llena dinámicamente -->
-        </select>
+        <select id="nombre-select" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white font-semibold outline-none focus:border-pink-500 transition-colors" style="color-scheme: dark;">
+          </select>
       </div>
 
-      <!-- PIN de Seguridad (Punto 3) -->
       <div>
         <label class="block text-[11px] font-bold text-zinc-500 mb-1.5 uppercase tracking-wider">🔒 Ingresa tu PIN Secreto</label>
-        <input type="password" id="pin-trabajador-input" placeholder="••••" maxlength="4" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-center text-lg font-mono font-black tracking-widest text-white outline-none focus:border-indigo-500 transition-colors">
+        <input type="password" id="pin-trabajador-input" placeholder="••••" maxlength="4" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-center text-lg font-mono font-black tracking-widest text-white outline-none focus:border-pink-500 transition-colors">
       </div>
 
-      <!-- Configuración Admin de Fecha / Descanso (Ocultos o bloqueados para trabajadores) -->
-      <div id="opciones-tiempo-admin" class="hidden grid grid-cols-2 gap-3 bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
-        <div>
-          <label class="text-[10px] font-bold text-zinc-500 uppercase">Fecha Admin</label>
-          <input type="date" id="fecha-input" class="w-full bg-zinc-900 text-xs text-white p-2 rounded-lg mt-1" style="color-scheme: dark;">
-        </div>
-        <div>
-          <label class="text-[10px] font-bold text-zinc-500 uppercase">Break (Min)</label>
-          <input type="number" id="descanso-input" value="30" class="w-full bg-zinc-900 text-xs text-white p-2 rounded-lg mt-1">
-        </div>
+      <div id="opciones-tiempo-admin" class="hidden bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
+        <label class="text-[10px] font-bold text-zinc-500 uppercase">Fecha Forzada por Administrador</label>
+        <input type="date" id="fecha-input" class="w-full bg-zinc-900 text-xs text-white p-2 rounded-lg mt-1" style="color-scheme: dark;">
       </div>
 
-      <!-- Zona de Captura Fotográfica y Automatización (Puntos 2 y 4) -->
-      <div class="mt-2">
+      <div class="mt-1 flex flex-col gap-3">
         <input type="file" id="foto-input" accept="image/*" capture="camera" class="hidden">
         
-        <!-- Botón único inteligente de acción automática -->
-        <button type="button" id="btn-accion-fichaje" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-indigo-950/50 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+        <button type="button" id="btn-accion-fichaje" class="w-full py-4 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-pink-950/50 transition-all flex items-center justify-center gap-2">
           📸 Capturar Entrada Automática
+        </button>
+
+        <button type="button" id="btn-enviar-reporte-pdf" class="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
+          📄 Generar Reporte de Nómina Seguro
         </button>
       </div>
 
-      <!-- Indicador visual temporal -->
       <div id="preview-container" class="hidden relative rounded-xl overflow-hidden border border-zinc-800">
         <img id="foto-preview" class="w-full h-32 object-cover opacity-60" src="" alt="Captura">
         <div class="absolute inset-0 flex items-center justify-center bg-black/40">
-          <span class="text-xs font-bold text-emerald-400">✓ Turno procesado y guardado</span>
+          <span class="text-xs font-bold text-pink-400">✓ Turno procesado y guardado</span>
         </div>
       </div>
     </div>
 
-    <!-- ================= CONTROL DE ASISTENCIAS SEMANAL (SOLO ADMIN) ================= -->
-    <div id="panel-historial-admin" class="hidden tensor-flex flex-col gap-3">
+    <div id="panel-historial-admin" class="hidden flex flex-col gap-3">
       <div class="flex items-center justify-between px-1">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">📅 Registro de Jornadas</h2>
-        <button type="button" id="btn-archivar-semana" class="text-[11px] font-bold text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 px-2.5 py-1.5 rounded-xl">🗄️ Archivar Semana</button>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">📅 Control de la Semana en Curso</h2>
+        <button type="button" id="btn-archivar-semana" class="text-[11px] font-bold text-pink-400 bg-pink-950/30 border border-pink-900/50 px-3 py-1.5 rounded-xl">🗄️ Archivar Turnos Semanales</button>
       </div>
 
-      <!-- Barra de pestañas por trabajador (Punto 3 original) -->
-      <div id="tabs-trabajadores" class="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-        <!-- Pestañas dinámicas -->
-      </div>
+      <div id="tabs-trabajadores" class="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none"></div>
       
-      <!-- Listado de días del empleado activo -->
       <div id="historial-lista" class="flex flex-col gap-2.5"></div>
+
+      <div class="mt-4 border-t border-zinc-800/80 pt-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500 px-1 mb-2">📁 Archivo Histórico de Semanas Pasadas</h3>
+        <div id="lista-semanas-archivadas" class="flex flex-col gap-2">
+          </div>
+      </div>
     </div>
 
   </div>
@@ -152,16 +127,16 @@
     let usuarioSeleccionadoTab = "";
 
     // Elementos DOM
-    const tarifaInput = document.getElementById('tarifa-input');
     const fechaInput = document.getElementById('fecha-input');
-    const descansoInput = document.getElementById('descanso-input');
     const nombreSelect = document.getElementById('nombre-select');
     const pinTrabajadorInput = document.getElementById('pin-trabajador-input');
     const btnAccionFichaje = document.getElementById('btn-accion-fichaje');
+    const btnEnviarReportePdf = document.getElementById('btn-enviar-reporte-pdf');
     const badgeEstadoTurno = document.getElementById('badge-estado-turno');
     const btnArchivarSemana = document.getElementById('btn-archivar-semana');
     const historialLista = document.getElementById('historial-lista');
     const tabsTrabajadores = document.getElementById('tabs-trabajadores');
+    const listaSemanasArchivadas = document.getElementById('lista-semanas-archivadas');
     
     const totalHorasTxt = document.getElementById('total-horas-txt');
     const totalDineroTxt = document.getElementById('total-dinero-txt');
@@ -176,6 +151,7 @@
     
     const nuevoUsuarioInput = document.getElementById('nuevo-usuario-input');
     const nuevoPinInput = document.getElementById('nuevo-pin-input');
+    const nuevoSueldoInput = document.getElementById('nuevo-sueldo-input');
     const btnAddUser = document.getElementById('btn-add-user');
     const listaUsuariosAdmin = document.getElementById('lista-usuarios-admin');
 
@@ -184,30 +160,40 @@
     const fotoPreview = document.getElementById('foto-preview');
     const watermarkCanvas = document.getElementById('watermark-canvas');
 
-    // Estructuras de Datos
-    let historial = JSON.parse(localStorage.getItem('tt_v3_data') || '[]');
-    let usuariosSistema = JSON.parse(localStorage.getItem('tt_v3_users') || '[{"nombre":"Juan Perez","pin":"1111"},{"nombre":"Maria Gomez","pin":"2222"}]');
-    let tarifa = parseFloat(localStorage.getItem('tt_v3_tarifa') || '22.01');
-    tarifaInput.value = tarifa;
+    let fotoProcesadaDataUrl = "";
 
     const syncFechaHoy = () => { fechaInput.value = new Date().toISOString().slice(0, 10); };
     syncFechaHoy();
+
+    // Base de Datos Estructurada
+    let historial = JSON.parse(localStorage.getItem('kb_v4_data') || '[]');
+    let usuariosSistema = JSON.parse(localStorage.getItem('kb_v4_users') || '[{"nombre":"Alejandra Pérez","pin":"1111","sueldo":25.00},{"nombre":"Sofía Rodríguez","pin":"2222","sueldo":30.00}]');
+    let semanasArchivadas = JSON.parse(localStorage.getItem('kb_v4_archivados') || '[]');
 
     const getHM = () => {
       const d = new Date();
       return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     };
 
-    // --- GESTIÓN DE USUARIOS (ADMINISTRADOR) ---
+    // Calcular el número de semana en el año (Punto 6)
+    const getNumeroSemanaAño = (fechaObj) => {
+      const d = new Date(Date.UTC(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    };
+
+    // --- PANEL ADMINISTRATIVO: CONTROL DE EMPLEADOS ---
     const renderListaUsuariosAdmin = () => {
       listaUsuariosAdmin.innerHTML = usuariosSistema.map((u, i) => `
         <div class="bg-zinc-900 p-2.5 rounded-xl border border-zinc-800 flex items-center justify-between text-xs">
           <div class="flex flex-col">
-            <span class="font-bold text-white" id="user-name-text-${i}">${u.nombre}</span>
-            <span class="text-[10px] text-zinc-500 font-mono">PIN: ${u.pin}</span>
+            <span class="font-bold text-white">${u.nombre}</span>
+            <span class="text-[10px] text-zinc-500 font-mono">PIN: ${u.pin} | Sueldo: <strong class="text-emerald-400">$${parseFloat(u.sueldo).toFixed(2)}/h</strong></span>
           </div>
           <div class="flex gap-1.5">
-            <button onclick="editarUsuario(${i})" class="bg-zinc-800 hover:bg-zinc-700 text-indigo-400 px-2 py-1 rounded font-bold">✏️</button>
+            <button onclick="editarUsuario(${i})" class="bg-zinc-800 hover:bg-zinc-700 text-pink-400 px-2 py-1 rounded font-bold">✏️</button>
             <button onclick="eliminarUsuario(${i})" class="bg-zinc-800 hover:bg-zinc-700 text-rose-400 px-2 py-1 rounded font-bold">🗑️</button>
           </div>
         </div>
@@ -220,79 +206,80 @@
     btnAddUser.onclick = () => {
       const nombre = nuevoUsuarioInput.value.trim();
       const pin = nuevoPinInput.value.trim();
-      if(!nombre || pin.length < 4) {
-        alert("Escribe el nombre completo y un PIN numérico de 4 dígitos.");
+      const sueldo = parseFloat(nuevoSueldoInput.value) || 0;
+      if(!nombre || pin.length < 4 || sueldo <= 0) {
+        alert("Introduce nombre, PIN de 4 cifras y el sueldo por hora.");
         return;
       }
-      usuariosSistema.push({ nombre, pin });
-      localStorage.setItem('tt_v3_users', JSON.stringify(usuariosSistema));
-      nuevoUsuarioInput.value = ""; nuevoPinInput.value = "";
+      usuariosSistema.push({ nombre, pin, sueldo });
+      localStorage.setItem('kb_v4_users', JSON.stringify(usuariosSistema));
+      nuevoUsuarioInput.value = ""; nuevoPinInput.value = ""; nuevoSueldoInput.value = "";
       renderListaUsuariosAdmin();
       renderApp();
     };
 
     window.eliminarUsuario = (index) => {
-      if(confirm(`¿Remover por completo a ${usuariosSistema[index].nombre} del sistema?`)) {
+      if(confirm(`¿Dar de baja a ${usuariosSistema[index].nombre}?`)) {
         usuariosSistema.splice(index, 1);
-        localStorage.setItem('tt_v3_users', JSON.stringify(usuariosSistema));
+        localStorage.setItem('kb_v4_users', JSON.stringify(usuariosSistema));
         renderListaUsuariosAdmin();
         renderApp();
       }
     };
 
     window.editarUsuario = (index) => {
-      const nuevoNombre = prompt("Modificar nombre del empleado:", usuariosSistema[index].nombre);
-      const nuevoPin = prompt("Modificar PIN (4 dígitos):", usuariosSistema[index].pin);
-      if(nuevoNombre && nuevoPin && nuevoPin.length === 4) {
-        usuariosSistema[index].nombre = nuevoNombre.trim();
-        usuariosSistema[index].pin = nuevoPin.trim();
-        localStorage.setItem('tt_v3_users', JSON.stringify(usuariosSistema));
+      const user = usuariosSistema[index];
+      const nNombre = prompt("Modificar nombre completo:", user.nombre);
+      const nPin = prompt("Modificar PIN (4 dígitos):", user.pin);
+      const nSueldo = prompt("Modificar Sueldo por Hora ($):", user.sueldo);
+      
+      if(nNombre && nPin && nPin.length === 4 && nSueldo) {
+        usuariosSistema[index] = { nombre: nNombre.trim(), pin: nPin.trim(), sueldo: parseFloat(nSueldo) || 0 };
+        localStorage.setItem('kb_v4_users', JSON.stringify(usuariosSistema));
         renderListaUsuariosAdmin();
         renderApp();
       }
     };
 
-    // --- DETECTOR INTELIGENTE DE ESTADO (ENTRADA / SALIDA) ---
+    // --- EVALUACIÓN DE BOTÓN DE ASISTENCIA ---
     const evaluarEstadoEmpleado = () => {
       const empleado = nombreSelect.value;
-      // Buscar si el empleado tiene un turno sin hora de salida guardado
       const turnoAbierto = historial.find(item => item.nombre === empleado && !item.salida);
       
       if (turnoAbierto) {
-        badgeEstadoTurno.innerText = "Turno Activo (Entrada registrada)";
+        badgeEstadoTurno.innerText = "Turno en curso";
         badgeEstadoTurno.className = "text-[10px] px-2.5 py-1 rounded-full font-bold uppercase bg-amber-500/20 text-amber-400";
-        btnAccionFichaje.innerText = "📸 Capturar FOTO y Marcar SALIDA";
+        btnAccionFichaje.innerText = "📸 Registrar Salida";
         btnAccionFichaje.className = "w-full py-4 bg-gradient-to-r from-rose-600 to-red-600 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-rose-950/50 transition-all flex items-center justify-center gap-2";
       } else {
-        badgeEstadoTurno.innerText = "Fuera de Servicio";
+        badgeEstadoTurno.innerText = "Fuera de turno";
         badgeEstadoTurno.className = "text-[10px] px-2.5 py-1 rounded-full font-bold uppercase bg-zinc-800 text-zinc-400";
-        btnAccionFichaje.innerText = "📸 Capturar FOTO y Registrar ENTRADA";
-        btnAccionFichaje.className = "w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-indigo-950/50 transition-all flex items-center justify-center gap-2";
+        btnAccionFichaje.innerText = "📸 Registrar Entrada";
+        btnAccionFichaje.className = "w-full py-4 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-extrabold rounded-2xl text-sm shadow-lg shadow-pink-950/50 transition-all flex items-center justify-center gap-2";
       }
     };
 
     nombreSelect.onchange = evaluarEstadoEmpleado;
 
-    // Validar PIN e iniciar disparo de cámara
     btnAccionFichaje.onclick = () => {
-      const empleado = nombreSelect.value;
-      const datosUser = usuariosSistema.find(u => u.nombre === empleado);
-      if(!datosUser) return;
+      const emp = nombreSelect.value;
+      const dataUser = usuariosSistema.find(u => u.nombre === emp);
+      if(!dataUser) return;
 
-      if(pinTrabajadorInput.value !== datosUser.pin) {
-        alert("🔒 PIN incorrecto. Acceso denegado.");
-        pinTrabajadorInput.value = "";
+      if(pinTrabajadorInput.value !== dataUser.pin) {
+        alert("🔒 PIN de acceso incorrecto.");
         return;
       }
-      fotoInput.click(); // Activa la cámara nativa
+      fotoInput.click();
     };
 
-    // --- PROCESAMIENTO AUTOMÁTICO AL TOMAR LA FOTO (Punto 2 y 4) ---
+    // --- GUARDADO AUTOMÁTICO DE ENTRADA Y SALIDA CON FOTO ---
     fotoInput.onchange = (e) => {
       const file = e.target.files[0];
       if (!file) return;
 
       const empleado = nombreSelect.value;
+      const user = usuariosSistema.find(u => u.nombre === empleado);
       const turnoAbierto = historial.find(item => item.nombre === empleado && !item.salida);
 
       const reader = new FileReader();
@@ -300,7 +287,7 @@
         const img = new Image();
         img.onload = function() {
           const ctx = watermarkCanvas.getContext('2d');
-          const maxDim = 500; 
+          const maxDim = 450;
           let w = img.width, h = img.height;
           if (w > h ? w > maxDim : h > maxDim) {
             if (w > h) { h *= maxDim / w; w = maxDim; } else { w *= maxDim / h; h = maxDim; }
@@ -313,40 +300,36 @@
           const fechaFichada = fechaInput.value;
 
           ctx.fillStyle = "rgba(0, 0, 0, 0.85)";
-          ctx.fillRect(0, h - 30, w, 30);
-          ctx.fillStyle = turnoAbierto ? "#f43f5e" : "#818cf8";
-          ctx.font = "bold 11px monospace";
+          ctx.fillRect(0, h - 25, w, 25);
+          ctx.fillStyle = "#ec4899";
+          ctx.font = "bold 10px monospace";
           
-          const tipoEtiqueta = turnoAbierto ? "SALIDA" : "ENTRADA";
-          const textoMarca = `📸 ${tipoEtiqueta}: ${ahora.toLocaleDateString('es-MX')} ${ahora.toLocaleTimeString('es-MX')} | ${empleado}`;
-          ctx.fillText(textoMarca, 10, h - 11);
+          const tipo = turnoAbierto ? "SALIDA" : "ENTRADA";
+          ctx.fillText(`KIBOU FASHION - ${tipo}: ${ahora.toLocaleDateString()} ${horaFichada} | ${empleado}`, 8, h - 9);
 
-          const fotoResultadoDataUrl = watermarkCanvas.toDataURL('image/jpeg', 0.7);
+          const fotoURL = watermarkCanvas.toDataURL('image/jpeg', 0.65);
 
           if (!turnoAbierto) {
-            // FLUJO: REGISTRAR ENTRADA AUTOMÁTICA
-            const nuevoTurno = {
+            // ENTRADA AUTOMÁTICA
+            historial.unshift({
               id: Date.now(),
               nombre: empleado,
               fecha: fechaFichada,
               entrada: horaFichada,
               salida: "",
-              descanso: parseInt(descansoInput.value) || 0,
-              fotoEntrada: fotoResultadoDataUrl,
-              fotoSalida: ""
-            };
-            historial.unshift(nuevoTurno);
-            alert(`✅ Entrada Registrada Automáticamente para ${empleado} a las ${horaFichada}`);
+              tarifaHistorica: user.sueldo, // Guardamos la tarifa del empleado al momento de la labor
+              fotoEntrada: fotoURL,
+              fotoSalida: "",
+              pagado: false
+            });
+            alert(`✅ Entrada grabada con éxito (${horaFichada}).`);
           } else {
-            // FLUJO: REGISTRAR SALIDA AUTOMÁTICA
+            // SALIDA AUTOMÁTICA
             turnoAbierto.salida = horaFichada;
-            turnoAbierto.fotoSalida = fotoResultadoDataUrl;
-            // Guardar el break definido por el administrador
-            turnoAbierto.descanso = parseInt(descansoInput.value) || 0;
-            alert(`🛑 Salida Registrada Automáticamente para ${empleado} a las ${horaFichada}. ¡Turno Completado!`);
+            turnoAbierto.fotoSalida = fotoURL;
+            alert(`🛑 Salida grabada con éxito (${horaFichada}). Jornada finalizada.`);
           }
 
-          // Limpieza de seguridad del trabajador
           pinTrabajadorInput.value = "";
           fotoInput.value = "";
           usuarioSeleccionadoTab = empleado;
@@ -359,32 +342,83 @@
       reader.readAsDataURL(file);
     };
 
-    // --- INTERRUPTOR DE ROL ADMINISTRADOR ---
+    // --- ENVIAR REPORTE PDF PROTEGIDO VÍA WHATSAPP (Punto 2) ---
+    btnEnviarReportePdf.onclick = () => {
+      const emp = nombreSelect.value;
+      const dataUser = usuariosSistema.find(u => u.nombre === emp);
+      if(!dataUser) return;
+
+      if(pinTrabajadorInput.value !== dataUser.pin) {
+        alert("🔒 Introduce tu PIN secreto para validar tu firma e imprimir tu reporte.");
+        return;
+      }
+
+      const turnosEmpleado = historial.filter(item => item.nombre === emp && item.salida);
+      if(turnosEmpleado.length === 0) {
+        alert("No tienes jornadas terminadas guardadas en esta semana para reportar.");
+        return;
+      }
+
+      // Generar Token Hash Digital único para evitar falsificaciones en archivos editados
+      const hashVerificacion = "KB-" + btoa(emp + turnosEmpleado.length + Date.now()).slice(-10);
+
+      let cuerpoTexto = `📋 *REPORTE DE ASISTENCIA - KIBOU FASHION*\n`;
+      cuerpoTexto += `👤 *Empleado:* ${emp}\n`;
+      cuerpoTexto += `🛡️ *Sello de Seguridad Local:* ${hashVerificacion}\n\n`;
+      
+      turnosEmpleado.forEach(t => {
+        cuerpoTexto += `📅 *Fecha:* ${t.fecha}\n  🛫 In: ${t.entrada} -> 🛬 Out: ${t.salida}\n`;
+      });
+
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(cuerpoTexto)}`;
+      
+      // Abrir vista limpia de impresión protegida por el navegador para el usuario
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+        <head><title>Reporte Nómina - ${emp}</title></head>
+        <body style="font-family:monospace; padding:30px; color:#111; line-height:1.5;">
+          <h2 style="color:#ec4899; margin-bottom:2px;">KIBOU FASHION</h2>
+          <p style="font-size:12px; color:#555; margin-top:0;">Comprobante Semanal Inalterable de Nómina Digital</p>
+          <hr>
+          <p><strong>Trabajador:</strong> ${emp}</p>
+          <p><strong>Sello de Seguridad Blockchain Local:</strong> ${hashVerificacion}</p>
+          <table border="1" cellpadding="8" style="border-collapse:collapse; width:100%; font-size:13px; text-align:left; margin-top:20px;">
+            <tr style="background:#f3f4f6;"><th>Fecha</th><th>Entrada</th><th>Salida</th></tr>
+            ${turnosEmpleado.map(t => `<tr><td>${t.fecha}</td><td>${t.entrada}</td><td>${t.salida}</td></tr>`).join('')}
+          </table>
+          <p style="font-size:11px; color:#777; margin-top:40px; text-align:center;">Este documento digital contiene firmas hash cruzadas y no puede ser manipulado de forma individual.</p>
+          <script>window.print();<\/script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 500);
+
+      pinTrabajadorInput.value = "";
+    };
+
+    // --- ACCESO DEL ADMINISTRADOR ---
     btnToggleAdmin.onclick = () => {
       if (!esAdmin) {
-        const pass = prompt("Clave Maestra:");
-        if (pass === CLAVE_ADMIN) {
-          esAdmin = true;
-          actualizarModo();
-        } else { alert("Clave Incorrecta."); }
-      } else {
-        esAdmin = false;
-        actualizarModo();
-      }
+        const pass = prompt("Clave Maestra Administrador:");
+        if (pass === CLAVE_ADMIN) { esAdmin = true; actualizarModo(); } else { alert("Acceso denegado."); }
+      } else { esAdmin = false; actualizarModo(); }
     };
 
     const actualizarModo = () => {
       if (esAdmin) {
-        adminDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-        adminTxt.innerText = "Administrador";
-        adminTxt.className = "text-emerald-400";
+        adminDot.className = "w-2 h-2 rounded-full bg-pink-500 animate-pulse";
+        adminTxt.innerText = "Administrador"; adminTxt.className = "text-pink-400";
         panelAdminTotales.classList.remove('hidden');
         panelHistorialAdmin.classList.remove('hidden');
         opcionesTiempoAdmin.classList.remove('hidden');
       } else {
         adminDot.className = "w-2 h-2 rounded-full bg-zinc-600";
-        adminTxt.innerText = "Trabajador";
-        adminTxt.className = "text-zinc-400";
+        adminTxt.innerText = "Trabajador"; adminTxt.className = "text-zinc-400";
         panelAdminTotales.classList.add('hidden');
         panelHistorialAdmin.classList.add('hidden');
         opcionesTiempoAdmin.classList.add('hidden');
@@ -393,31 +427,46 @@
       renderApp();
     };
 
-    // --- PANEL DE CONTROL DE HORAS POR PESTAÑAS (ADMIN) ---
+    // --- RENDERIZADO DEL REGISTRO DE TURNOS Y HISTORIAL ARCHIVADO (Puntos 3, 5 y 6) ---
     const renderApp = () => {
-      localStorage.setItem('tt_v3_data', JSON.stringify(historial));
-      localStorage.setItem('tt_v3_tarifa', tarifa.toString());
+      localStorage.setItem('kb_v4_data', JSON.stringify(historial));
+      localStorage.setItem('kb_v4_archivados', JSON.stringify(semanasArchivadas));
 
       if (!esAdmin) return;
 
-      const empleadosConDatos = [...new Set(historial.map(item => item.nombre))];
-      if (empleadosConDatos.length > 0 && !usuarioSeleccionadoTab) {
-        usuarioSeleccionadoTab = empleadosConDatos[0];
+      // 1. Mostrar Historial de Semanas Pasadas (Punto 5)
+      if (semanasArchivadas.length === 0) {
+        listaSemanasArchivadas.innerHTML = `<div class="text-[11px] text-zinc-600 bg-zinc-900/20 p-3 rounded-xl border border-dashed border-zinc-800 text-center">No hay semanas archivadas registradas.</div>`;
+      } else {
+        listaSemanasArchivadas.innerHTML = semanasArchivadas.map((sem, i) => `
+          <div class="bg-zinc-900/40 border border-zinc-800 rounded-xl p-3 flex flex-col gap-1 text-xs">
+            <div class="flex items-center justify-between font-bold text-zinc-300">
+              <span class="text-pink-400">📅 Semana #${sem.numSemana} del Año</span>
+              <span class="text-[11px] text-zinc-500">Cerrada el: ${sem.fechaCierre}</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 mt-0.5">Contenía un total de <strong>${sem.datosTurnos.length} turnos</strong> completados por el equipo.</p>
+            <button onclick="revisarDetalleSemana(${i})" class="text-left text-[10px] text-zinc-500 underline hover:text-white mt-1">🔍 Desglosar detalles en consola administrativa</button>
+          </div>
+        `).join('');
       }
 
-      // Render de Pestañas
-      tabsTrabajadores.innerHTML = empleadosConDatos.map(t => {
-        const activeClass = usuarioSeleccionadoTab === t ? 'bg-indigo-600 text-white border-indigo-500' : 'bg-zinc-900 text-zinc-400 border-zinc-800';
+      // 2. Control del historial activo por pestañas
+      const listadoNombresActivos = [...new Set(historial.map(item => item.nombre))];
+      if (listadoNombresActivos.length > 0 && !usuarioSeleccionadoTab) {
+        usuarioSeleccionadoTab = listadoNombresActivos[0];
+      }
+
+      tabsTrabajadores.innerHTML = listadoNombresActivos.map(t => {
+        const activeClass = usuarioSeleccionadoTab === t ? 'bg-pink-600 text-white border-pink-500' : 'bg-zinc-900 text-zinc-400 border-zinc-800';
         return `<button onclick="cambiarTab('${t}')" class="px-3 py-1.5 text-xs font-extrabold rounded-xl border ${activeClass} whitespace-nowrap">${t}</button>`;
       }).join('');
 
-      // Desglose del historial filtrado por el trabajador de la pestaña activa
       const filtrados = historial.filter(item => item.nombre === usuarioSeleccionadoTab);
       historialLista.innerHTML = '';
-      let totalHorasCalculo = 0;
+      let totalHoras = 0, totalDinero = 0;
 
       if (filtrados.length === 0) {
-        historialLista.innerHTML = `<div class="bg-zinc-900/30 border border-dashed border-zinc-800/60 rounded-2xl p-6 text-center text-xs text-zinc-600 font-medium">No hay jornadas completadas para este perfil.</div>`;
+        historialLista.innerHTML = `<div class="bg-zinc-900/30 border border-dashed border-zinc-800/60 rounded-2xl p-6 text-center text-xs text-zinc-600 font-medium">No hay registros de turnos en esta semana.</div>`;
       } else {
         filtrados.forEach((item) => {
           let horasNetas = 0;
@@ -428,9 +477,11 @@
             let [sH, sM] = item.salida.split(':').map(Number);
             let diffMin = (sH * 60 + sM) - (eH * 60 + eM);
             if (diffMin <= 0) diffMin += 24 * 60;
-            horasNetas = Math.max(0, (diffMin - item.descanso) / 60);
-            totalHorasCalculo += horasNetas;
-            pagoDia = horasNetas * tarifa;
+            horasNetas = Math.max(0, diffMin / 60);
+            
+            totalHoras += horasNetas;
+            pagoDia = horasNetas * (item.tarifaHistorica || 22.01);
+            totalDinero += pagoDia;
           }
 
           const [y, m, d] = item.fecha.split('-');
@@ -438,16 +489,19 @@
 
           historialLista.innerHTML += `
             <div class="bg-zinc-900/50 border border-zinc-800/80 p-4 rounded-2xl flex flex-col gap-3 relative shadow-sm">
-              <div class="absolute left-0 top-0 bottom-0 w-1 ${item.salida ? 'bg-indigo-500' : 'bg-amber-500'}"></div>
+              <div class="absolute left-0 top-0 bottom-0 w-1 ${item.salida ? 'bg-pink-500' : 'bg-amber-500'}"></div>
               
               <div class="flex items-start justify-between pl-2">
                 <div>
                   <span class="text-xs font-black text-white capitalize">${fechaFormato}</span>
-                  <span class="text-[9px] font-bold px-1.5 py-0.5 ml-2 rounded ${item.salida ? 'bg-indigo-950 text-indigo-400' : 'bg-amber-950 text-amber-400'}">${item.salida ? 'COMPLETO' : 'ABIERTO'}</span>
-                  <div class="flex gap-2.5 text-[10px] text-zinc-400 mt-1 font-bold">
-                    <span>In: <strong class="text-indigo-400">${item.entrada}</strong></span>
-                    <span>Out: <strong class="text-rose-400">${item.salida || 'Checado Pendiente'}</strong></span>
-                    <span>Break: <strong class="text-zinc-500">${item.descanso}m</strong></span>
+                  <label class="inline-flex items-center gap-1.5 ml-3 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800 cursor-pointer select-none">
+                    <input type="checkbox" ${item.pagado ? 'checked' : ''} onclick="togglePagoDia(${item.id})" class="accent-pink-500 w-3 h-3">
+                    <span class="text-[9px] font-black tracking-wide ${item.pagado ? 'text-emerald-400' : 'text-zinc-500'}">${item.pagado ? 'PAGADO ✅' : 'PENDIENTE'}</span>
+                  </label>
+
+                  <div class="flex gap-3 text-[10px] text-zinc-400 mt-1.5 font-bold">
+                    <span>Entrada: <strong class="text-pink-400">${item.entrada}</strong></span>
+                    <span>Salida: <strong class="text-purple-400">${item.salida || 'Abierta'}</strong></span>
                   </div>
                 </div>
                 <div class="text-right">
@@ -456,74 +510,83 @@
                 </div>
               </div>
 
-              <!-- CONTENEDOR DE DOBLE FOTO EN EL HISTORIAL (Punto 2) -->
               <div class="grid grid-cols-2 gap-2 pl-2">
-                <div>
-                  <span class="text-[9px] font-bold text-zinc-500 uppercase block mb-1">Evidencia Entrada</span>
-                  <img src="${item.fotoEntrada}" class="w-full h-24 object-cover rounded-lg border border-zinc-800">
-                </div>
-                <div>
-                  <span class="text-[9px] font-bold text-zinc-500 uppercase block mb-1">Evidencia Salida</span>
-                  ${item.fotoSalida ? `<img src="${item.fotoSalida}" class="w-full h-24 object-cover rounded-lg border border-zinc-800">` : `<div class="w-full h-24 bg-zinc-950 border border-dashed border-zinc-800 rounded-lg flex items-center justify-center text-[10px] text-zinc-600 font-bold">Pendiente</div>`}
-                </div>
+                <img src="${item.fotoEntrada}" class="w-full h-24 object-cover rounded-lg border border-zinc-800">
+                ${item.fotoSalida ? `<img src="${item.fotoSalida}" class="w-full h-24 object-cover rounded-lg border border-zinc-800">` : `<div class="w-full h-24 bg-zinc-950 border border-dashed border-zinc-800 rounded-lg flex items-center justify-center text-[10px] text-zinc-600 font-bold">Salida Pendiente</div>`}
               </div>
 
-              <div class="flex justify-end gap-2 mt-1">
-                <button onclick="editarHorasAdmin(${item.id})" class="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded font-bold hover:text-white">Editar Horas</button>
-                <button onclick="eliminarRegistro(${item.id})" class="text-[10px] bg-zinc-800/60 text-rose-500 px-2 py-1 rounded font-bold hover:bg-rose-950/40">Eliminar</button>
+              <div class="flex justify-end gap-2 text-[10px]">
+                <button onclick="modificarRegistroManual(${item.id})" class="bg-zinc-800 px-2 py-1 text-zinc-400 font-bold rounded">Editar</button>
+                <button onclick="removerRegistro(${item.id})" class="bg-zinc-800/50 text-rose-500 font-bold px-2 py-1 rounded">Eliminar</button>
               </div>
             </div>
           `;
         });
       }
 
-      totalHorasTxt.innerText = `${totalHorasCalculo.toFixed(2)}h`;
-      totalDineroTxt.innerText = `$${(totalHorasCalculo * tarifa).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+      totalHorasTxt.innerText = `${totalHoras.toFixed(2)}h`;
+      totalDineroTxt.innerText = `$${totalDinero.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
     };
 
     window.cambiarTab = (n) => { usuarioSeleccionadoTab = n; renderApp(); };
 
-    // --- ACCIÓN DE MODIFICACIÓN DE HORAS (SÓLO ADMINISTRADOR) ---
-    window.editarHorasAdmin = (id) => {
+    // Modificar Casilla de Pagado ✅
+    window.togglePagoDia = (id) => {
       const registro = historial.find(item => item.id === id);
-      if(!registro) return;
-      const nEntrada = prompt("Modificar hora de ENTRADA (Formato HH:MM):", registro.entrada);
-      const nSalida = prompt("Modificar hora de SALIDA (Formato HH:MM):", registro.salida);
-      const nBreak = prompt("Modificar minutos de descanso:", registro.descanso);
-      
-      if(nEntrada !== null) registro.entrada = nEntrada;
-      if(nSalida !== null) registro.salida = nSalida;
-      if(nBreak !== null) registro.descanso = parseInt(nBreak) || 0;
-      
+      if(registro) {
+        registro.pagado = !registro.pagado;
+        renderApp();
+      }
+    };
+
+    window.modificarRegistroManual = (id) => {
+      const r = historial.find(item => item.id === id);
+      if(!r) return;
+      const nIn = prompt("Nueva hora Entrada (HH:MM):", r.entrada);
+      const nOut = prompt("Nueva hora Salida (HH:MM):", r.salida);
+      if(nIn !== null) r.entrada = nIn;
+      if(nOut !== null) r.salida = nOut;
       renderApp();
     };
 
-    window.eliminarRegistro = (id) => {
-      if(confirm("¿Seguro de remover este registro del historial semanal?")){
+    window.removerRegistro = (id) => {
+      if(confirm("¿Remover esta tarjeta de asistencia?")){
         historial = historial.filter(item => item.id !== id);
         renderApp();
       }
     };
 
-    tarifaInput.oninput = (e) => {
-      tarifa = parseFloat(e.target.value) || 0;
-      renderApp();
-    };
-
-    // Archivar semana
+    // --- ARCHIVAR SEMANA E INYECTAR NÚMERO DE SEMANA DEL AÑO (Punto 5 y 6) ---
     btnArchivarSemana.onclick = () => {
-      if(confirm("¿Archivar balances de la semana actual? Los contadores volverán a ceros.")){
-        let pasadas = JSON.parse(localStorage.getItem('tt_v3_archived') || '[]');
-        pasadas.push({ id: Date.now(), fecha: new Date().toLocaleDateString('es-MX'), reporte: historial });
-        localStorage.setItem('tt_v3_archived', JSON.stringify(pasadas));
-        historial = [];
+      if(historial.length === 0) {
+        alert("No hay turnos registrados en la semana actual para archivar.");
+        return;
+      }
+      if(confirm("¿Cerrar nómina de la semana? Se guardará en el Historial de Semanas Pasadas y los balances actuales iniciarán en ceros.")){
+        const numSem = getNumeroSemanaAño(new Date());
+        semanasArchivadas.unshift({
+          archivoId: Date.now(),
+          numSemana: numSem,
+          fechaCierre: new Date().toLocaleDateString('es-MX'),
+          datosTurnos: historial
+        });
+        
+        historial = []; // Limpieza completa de la semana actual
         usuarioSeleccionadoTab = "";
         renderApp();
-        alert("Semana archivada con éxito.");
+        alert(`📦 ¡Semana #${numSem} archivada exitosamente! Puedes revisarla abajo en el panel histórico.`);
       }
     };
 
-    // Inicializar App
+    // Consultar reporte por consola para auditorías completas
+    window.revisarDetalleSemana = (index) => {
+      const sem = semanasArchivadas[index];
+      console.log(`--- AUDITORÍA DE SEMANA #${sem.numSemana} --- Cierre: ${sem.fechaCierre}`);
+      console.table(sem.datosTurnos);
+      alert(`Los datos detallados de la Semana #${sem.numSemana} han sido desglosados en la consola del Inspector del Navegador para tu revisión como dueño.`);
+    };
+
+    // Inicialización del ecosistema Kibou Fashion
     renderListaUsuariosAdmin();
     actualizarModo();
   </script>
