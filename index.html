@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Control de Asistencia</title>
     
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
+    <!-- Web App Manifest (Inline via Data URI para mantener un solo archivo) -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2wgZGUgQXNpc3RlbmNpYSIsCiAgInNob3J0X25hbWUiOiAiQXNpc3RlbmNpYSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjNyNGY2IiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDt1dGY4LDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTEyIDUxMic+PHJlY3Qgd2lkdGg9JzUxMicgaGVpZ2h0PSc1MTIn ryeD0nMTAwJyBmaWxsPScjMjU2M2ViJy8+PGNoZWNrYm94IGZpbGw9J3doaXRlJy8+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
 
     <style>
@@ -256,6 +258,7 @@
 
     <div class="container">
 
+        <!-- VISTA: CHECADOR -->
         <section id="view-checador" class="view-section active">
             <div class="card">
                 <h2>⏱️ Registrar Entrada / Salida</h2>
@@ -280,14 +283,17 @@
             </div>
         </section>
 
+        <!-- VISTA: TURNOS ABIERTOS -->
         <section id="view-turnos" class="view-section">
             <div class="card">
                 <h2>🟢 Turnos Activos en Campo</h2>
                 <div id="lista-turnos-activos" class="grid-list">
-                    </div>
+                    <!-- Dinámico -->
+                </div>
             </div>
         </section>
 
+        <!-- VISTA: NÓMINA -->
         <section id="view-nomina" class="view-section">
             <div class="card">
                 <h2>📊 Nómina Semanal (Lun - Dom)</h2>
@@ -296,10 +302,12 @@
                     <select id="nomina-semana-select" onchange="renderNomina()"></select>
                 </div>
                 <div id="lista-nomina" class="grid-list">
-                    </div>
+                    <!-- Dinámico -->
+                </div>
             </div>
         </section>
 
+        <!-- VISTA: EMPLEADOS -->
         <section id="view-empleados" class="view-section">
             <div class="card" id="admin-login-card">
                 <h2>🔒 Acceso Administrador</h2>
@@ -335,11 +343,13 @@
                 <div class="card">
                     <h2>📋 Catálogo de Personal</h2>
                     <div id="lista-empleados" class="grid-list">
-                        </div>
+                        <!-- Dinámico -->
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- VISTA: HISTORIAL -->
         <section id="view-historial" class="view-section">
             <div class="card">
                 <h2>📜 Historial General de Checadas</h2>
@@ -347,12 +357,14 @@
                     <select id="filtro-historial-emp" onchange="renderHistorial()"><option value="">Todos los empleados</option></select>
                 </div>
                 <div id="lista-historial" class="grid-list">
-                    </div>
+                    <!-- Dinámico -->
+                </div>
             </div>
         </section>
 
     </div>
 
+    <!-- Menú de Navegación Fijo Inferior -->
     <nav class="nav-bottom">
         <button class="nav-item active" onclick="cambiarVista('checador')">
             <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
@@ -396,7 +408,6 @@
         // --- MANEJO DE TIEMPO INTERNO (ZONA HORARIA SINALOA) ---
         function obtenerFechaSinaloa() {
             const ahora = new Date();
-            // Formateador para extraer componentes exactos de Sinaloa
             const dtf = new Intl.DateTimeFormat('en-US', {
                 timeZone: TZ_SINALOA,
                 year: 'numeric', month: '2-digit', day: '2-digit',
@@ -415,7 +426,6 @@
             return dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
-        // Obtiene el identificador ISO de la semana (Lunes a Domingo) para un objeto Date dado
         function obtenerSemanaISO(fecha) {
             const d = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
             const diaNum = d.getUTCDay() || 7;
@@ -509,7 +519,8 @@
             const empleado = BD.empleados.find(e => e.id === empId);
             if (empleado.pin !== pin) return alert("PIN incorrecto.");
 
-            const registroAbierto = BD.registros.find(r => r.empleadoId === empId && r.salida === null);
+            // CORREGIDO: Ahora busca adecuadamente usando 'horaSalida'
+            const registroAbierto = BD.registros.find(r => r.empleadoId === empId && r.horaSalida === null);
 
             if (tipo === 'entrada' && registroAbierto) {
                 return alert(`Ya cuentas con una entrada registrada abierta el ${registroAbierto.fecha} a las ${registroAbierto.horaEntrada}. Debes registrar salida primero.`);
@@ -546,7 +557,7 @@
             }
 
             guardarBD();
-            document.getElementById('check-pin').value = ''; // Limpiar PIN por seguridad
+            document.getElementById('check-pin').value = ''; 
             cargarEmpleadosEnSelects();
         }
 
@@ -554,7 +565,8 @@
         function renderTurnosActivos() {
             const contenedor = document.getElementById('lista-turnos-activos');
             contenedor.innerHTML = '';
-            const activos = BD.registros.filter(r => r.salida === null);
+            // CORREGIDO: Ahora filtra usando correctamente la propiedad 'horaSalida'
+            const activos = BD.registros.filter(r => r.horaSalida === null);
 
             if(activos.length === 0) {
                 contenedor.innerHTML = '<p style="color: var(--text-light); text-align: center;">No hay personal laborando en este momento.</p>';
@@ -588,13 +600,11 @@
             if(pin.length !== 4 || isNaN(pin)) return alert("El PIN debe ser estrictamente de 4 números.");
 
             if(id) {
-                // Modificar existente
                 const index = BD.empleados.findIndex(e => e.id === id);
                 if(index !== -1) {
                     BD.empleados[index] = { id, nombre, pin, sueldo };
                 }
             } else {
-                // Insertar Nuevo
                 BD.empleados.push({
                     id: 'emp_' + Date.now(),
                     nombre, pin, sueldo
@@ -662,10 +672,7 @@
             const select = document.getElementById('nomina-semana-select');
             const semanasUnicas = new Set();
             
-            // Añadir semana actual por defecto
             semanasUnicas.add(obtenerSemanaISO(obtenerFechaSinaloa()));
-            
-            // Extraer semanas de los registros guardados
             BD.registros.forEach(r => { if(r.semanaISO) semanasUnicas.add(r.semanaISO); });
 
             const seleccionadaAnteriormente = select.value;
@@ -683,7 +690,7 @@
             const t1 = new Date(reg.timestampEntrada);
             const t2 = new Date(reg.timestampSalida);
             const difMiliseconds = t2 - t1;
-            const horas = Math.max(0, difMiliseconds / (1000 * 60 * 60)); // Convertir a horas
+            const horas = Math.max(0, difMiliseconds / (1000 * 60 * 60)); 
             const pago = horas * (reg.sueldoPorHora || 0);
             return { horas, pago };
         }
@@ -695,15 +702,12 @@
 
             if(!semana) return;
 
-            // Agrupar registros calculados por empleado para la semana seleccionada
             const resumenEmpleados = {};
 
-            // Inicializar con todos los empleados vigentes
             BD.empleados.forEach(e => {
                 resumenEmpleados[e.id] = { nombre: e.nombre, horasTotales: 0, pagoTotal: 0, registrosValidos: 0 };
             });
 
-            // Filtrar y sumar las horas trabajadas
             BD.registros.forEach(r => {
                 if(r.semanaISO === Array.from(semana).join('') && r.timestampSalida) {
                     if(!resumenEmpleados[r.empleadoId]) {
@@ -815,14 +819,13 @@
             if(!reg) return;
 
             const nuevaHoraEntrada = prompt("Modificar hora de Entrada (Formato HH:MM:SS)", reg.horaEntrada);
-            if(nuevaHoraEntrada === null) return; // Cancelado
+            if(nuevaHoraEntrada === null) return; 
 
             let nuevaHoraSalida = reg.horaSalida;
             if(reg.horaSalida !== null) {
                 nuevaHoraSalida = prompt("Modificar hora de Salida (Formato HH:MM:SS)", reg.horaSalida);
             }
 
-            // Separar fecha existente para reconstruir el timestamp estructurado
             const [dia, mes, año] = reg.fecha.split('/');
             
             if (nuevaHoraEntrada) {
